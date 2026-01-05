@@ -121,7 +121,7 @@ router.post("/login", async (req, res) => {
       sameSite: "strict",
     });
 
-    return res.status(200).render("user/login");
+    return res.status(200).redirect("/events/discover");
   } catch (err) {
     console.log("Error:", err);
     return res.status(500).render("user/login", { error: "login failed" });
