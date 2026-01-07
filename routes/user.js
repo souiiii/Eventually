@@ -17,6 +17,15 @@ router.get("/signup", (req, res) => {
   return res.render("user/signup");
 });
 
+router.get("/logout", (req, res) => {
+  res.clearCookie("uid", {
+    httpOnly: true,
+    sameSite: "strict",
+  });
+  req.user = null;
+  return res.redirect("/user/login");
+});
+
 // Post Signup
 
 router.post("/signup", async (req, res) => {

@@ -2,8 +2,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { json, urlencoded } from "express";
 import path from "path";
+import commonRouter from "./routes/common.js";
 import userRouter from "./routes/user.js";
 import eventRouter from "./routes/events.js";
+import dashboardRouter from "./routes/dashboard.js";
+import adminRouter from "./routes/admin.js";
 import connectToMongoose from "./connection.js";
 import cookieParser from "cookie-parser";
 import { checkAuth, checkAuthorization } from "./middlewares/user.js";
@@ -21,8 +24,11 @@ app.use(cookieParser());
 app.use(express.static("public"));
 app.use(checkAuth);
 
+app.use("/", commonRouter);
 app.use("/user", userRouter);
-app.use("/events", checkAuthorization(["ADMIN", "STUDENT"]), eventRouter);
+app.use("/events", eventRouter);
+app.use("/dashboard", checkAuthorization(["STUDENT"]), dashboardRouter);
+app.use("/admin", checkAuthorization(["ADMIN"]), adminRouter);
 
 connectToMongoose(mongoPath)
   .then(() => {

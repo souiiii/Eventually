@@ -6,6 +6,10 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    shortDescription: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -23,13 +27,12 @@ const eventSchema = new mongoose.Schema(
       required: true,
       min: 1,
     },
-    venue: {
-      type: String,
-      required: true,
-    },
     deadline: {
       type: Date,
       required: true,
+      default: function () {
+        return this.startTime;
+      },
     },
     startTime: {
       type: Date,

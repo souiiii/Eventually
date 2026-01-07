@@ -3,3 +3,18 @@
   /* border: 0; */
   box-sizing: border-box;
 }
+
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: start;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+}

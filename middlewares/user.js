@@ -1,4 +1,5 @@
 import { getUser } from "../services/auth.js";
+import User from "../models/User.js";
 
 export function checkAuth(req, res, next) {
   try {
@@ -17,7 +18,7 @@ export function checkAuth(req, res, next) {
 }
 
 export function checkAuthorization(roles) {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
       if (!req.user) return res.status(400).redirect("/user/login");
       if (typeof req.user !== "object") throw new Error("Invalid User");
@@ -31,8 +32,11 @@ export function checkAuthorization(roles) {
         typeof user.role !== "string"
       )
         throw new Error("Invalid User");
+
+      const validUser = await User.findById(user._id);
+      if (!validUser) throw new Error("Invalid User");
       if (!roles.includes(user.role))
-        return res.status(400).send("Unauthorized Access");
+        return res.status(403).send("Unauthorized Access");
 
       return next();
     } catch (err) {
