@@ -15,12 +15,18 @@ router.get(
   "/discover",
   checkAuthorization(["ADMIN", "STUDENT"]),
   async (req, res) => {
+    const { role } = req.user.role;
     const now = new Date();
     const [events, registeredEvents] = await Promise.all([
       Event.find({ endTime: { $gt: now } }).lean(),
       Registration.find({ userId: req.user._id }).lean(),
     ]);
-    return res.render("events/upcoming", { events, now, registeredEvents });
+    return res.render("events/upcoming", {
+      events,
+      now,
+      registeredEvents,
+      role,
+    });
   }
 );
 

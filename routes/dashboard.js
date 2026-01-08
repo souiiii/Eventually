@@ -7,12 +7,34 @@ router.get("/", (req, res) => {
   return res.redirect("/dashboard/registered");
 });
 
-router.get("/cancelled", (req, res) => {
-  return res.render("dashboard/cancelled");
+router.get("/cancelled", async (req, res) => {
+  const now = new Date();
+  const cancelledEvents = await Registration.find({
+    userId: req.user._id,
+    status: "CANCELLED",
+  })
+    .populate({
+      path: "eventId",
+      select: "_id startTime endTime title shortDescription",
+    })
+    .lean()
+    .filter((r) => r.eventId);
+  return res.render("dashboard/cancelled", { cancelledEvents, now });
 });
 
-router.get("/registered", (req, res) => {
-  return res.render("dashboard/registered");
+router.get("/registered", async (req, res) => {
+  const now = new Date();
+  const registeredEvents = await Registration.find({
+    userId: req.user._id,
+    status: "REGISTERED",
+  })
+    .populate({
+      path: "eventId",
+      select: "_id startTime endTime title shortDescription",
+    })
+    .lean()
+    .filter((r) => r.eventId);
+  return res.render("dashboard/registered", { registeredEvents, now });
 });
 
 export default router;

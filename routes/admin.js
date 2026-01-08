@@ -273,8 +273,12 @@ router.delete("/delete-event/:id", async (req, res) => {
     const deletedEvent = await Event.findByIdAndDelete(id);
 
     if (!deletedEvent) {
-      return res.status(404).send("id   not found");
+      return res.status(404).send("id not found");
     }
+
+    await Registration.deleteMany({
+      eventId: id,
+    });
 
     return res.redirect("/events");
   } catch (err) {
