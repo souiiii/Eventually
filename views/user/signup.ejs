@@ -4,30 +4,32 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
-    <%- include('../partials/navbar.ejs') %>
-    <h1>Signup Page</h1>
-    <div>
-      <form action="/user/Signup" method="post">
-        <label>
-          <h2>Enter Name</h2>
-          <input required type="fullName" name="fullName" id="fullName" />
-        </label>
-        <label>
-          <h2>Enter Email</h2>
-          <input required type="email" name="email" id="email" />
-        </label>
-        <label>
-          <h2>Enter Password</h2>
-          <input
-            required
-            min="8"
-            type="password"
-            name="password"
-            id="password"
-          />
-        </label>
-        <button type="submit">Signup</button>
-      </form>
+    <div class="main">
+      <%- include('../partials/navbar.ejs') %>
+      <h1>Signup Page</h1>
+      <div>
+        <form action="/user/Signup" method="post">
+          <label>
+            <h2>Enter Name</h2>
+            <input required type="fullName" name="fullName" id="fullName" />
+          </label>
+          <label>
+            <h2>Enter Email</h2>
+            <input required type="email" name="email" id="email" />
+          </label>
+          <label>
+            <h2>Enter Password</h2>
+            <input
+              required
+              min="8"
+              type="password"
+              name="password"
+              id="password"
+            />
+          </label>
+          <button type="submit">Signup</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

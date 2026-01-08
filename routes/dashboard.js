@@ -21,17 +21,18 @@ router.get("/cancelled", async (req, res) => {
   const direction = dirText === "desc" ? -1 : 1;
   const sortObject = { [field]: direction };
 
-  const cancelledEvents = await Registration.find({
-    userId: req.user._id,
-    status: "CANCELLED",
-  })
-    .populate({
-      path: "eventId",
-      select: "_id startTime endTime title shortDescription",
+  const cancelledEvents = (
+    await Registration.find({
+      userId: req.user._id,
+      status: "CANCELLED",
     })
-    .sort(sortObject)
-    .lean()
-    .filter((r) => r.eventId);
+      .populate({
+        path: "eventId",
+        select: "_id startTime endTime title shortDescription",
+      })
+      .sort(sortObject)
+      .lean()
+  ).filter((r) => r.eventId);
 
   return res.render("dashboard/cancelled", {
     cancelledEvents,

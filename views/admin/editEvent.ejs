@@ -4,6 +4,7 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
+    <div class="main">
     <%- include('../partials/navbar.ejs') %>
     <h1>Edit Event</h1>
      <form action="/admin/edit-event/<%= locals.event._id %>" method="post">
@@ -45,5 +46,6 @@
       <button type="submit">Update Event</button>
     </form>
     <div><%= locals.error %></div>
+    </div>
   </body>
 </html>
