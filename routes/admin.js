@@ -69,12 +69,10 @@ router.post("/create-event", async (req, res) => {
         .render("admin/addEvent", { error: "Invalid capacity" });
     }
 
-    const now = new Date().toISOString().slice(0, 16);
-    console.log(now);
-
+    const now = new Date();
     if (
       [startTime, endTime, deadline].some(
-        (d) => Number.isNaN(d.getTime()) && d > now
+        (d) => Number.isNaN(d.getTime()) || d < now
       )
     )
       return res
@@ -118,23 +116,53 @@ router.get("/edit-event/:id", async (req, res) => {
       return res.status(400).send("bad request");
     }
 
-    const event = await Event.findById(id);
+    let event = await Event.findById(id);
+    event = event.toObject();
     if (!event) return res.status(404).send("Bad request");
-    return res.render("admin/editEvent", { event });
+    return res.render("admin/editEvent", {
+      event: {
+        ...event,
+        startTime: event.startTime.toISOString().slice(0, 16),
+        endTime: event.endTime.toISOString().slice(0, 16),
+        deadline: event.deadline.toISOString().slice(0, 16),
+      },
+    });
   } catch (err) {
     console.log("Error: ", err.message);
     return res.status(500).render("common/server-error");
   }
 });
-
-router.patch("/edit-event/:id", async (req, res) => {
+router.post("/edit-event/:id", async (req, res) => {
   try {
     const body = req.body;
     const id = req.params.id;
+
     if (!id) return res.status(400).send("No id passed");
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(400).send("bad request");
-    }
+
+    let event = await Event.findById(id);
+    if (!event) return res.status(400).send("bad request");
+
+    event = event.toObject();
+
+    const fmt = (d) => d.toISOString().slice(0, 16);
+    const baseEventForView = {
+      ...event,
+      startTime: fmt(event.startTime),
+      endTime: fmt(event.endTime),
+      deadline: fmt(event.deadline),
+    };
+
+    const renderEdit = (message) =>
+      res
+        .status(400)
+        .render("admin/editEvent", { event: baseEventForView, error: message });
+
+    const now = Date.now();
+
+    if (now >= event.startTime)
+      return res.status(400).send("event already commenced");
 
     if (
       !body.title ||
@@ -146,10 +174,10 @@ router.patch("/edit-event/:id", async (req, res) => {
       !body.deadline ||
       !body.startTime ||
       !body.endTime
-    )
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Field data missing" });
+    ) {
+      return renderEdit("Field data missing");
+    }
+
     if (
       typeof body.title !== "string" ||
       typeof body.shortDescription !== "string" ||
@@ -172,10 +200,9 @@ router.patch("/edit-event/:id", async (req, res) => {
         strict: false,
         strictSeparator: true,
       })
-    )
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid data sent" });
+    ) {
+      return renderEdit("Invalid data sent");
+    }
 
     const title = body.title.trim();
     const shortDescription = body.shortDescription.trim();
@@ -188,25 +215,23 @@ router.patch("/edit-event/:id", async (req, res) => {
     const endTime = new Date(body.endTime.trim());
 
     if (!Number.isInteger(capacity) || capacity <= 0) {
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid capacity" });
+      return renderEdit("Invalid capacity");
     }
 
-    if ([startTime, endTime, deadline].some((d) => Number.isNaN(d.getTime())))
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid date sent" });
+    if (
+      [startTime, endTime, deadline].some(
+        (d) => Number.isNaN(d.getTime()) || d < now
+      )
+    ) {
+      return renderEdit("Invalid date sent");
+    }
 
     if (startTime >= endTime) {
-      return res.status(400).render("admin/addEvent", {
-        error: "Start time must be before End Time",
-      });
+      return renderEdit("Start time must be before End Time");
     }
+
     if (startTime < deadline) {
-      return res.status(400).render("admin/addEvent", {
-        error: "Deadline must be before Start Time",
-      });
+      return renderEdit("Deadline must be before Start Time");
     }
 
     const updatedEvent = await Event.findByIdAndUpdate(

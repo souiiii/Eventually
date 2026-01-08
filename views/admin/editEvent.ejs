@@ -6,5 +6,44 @@
   <body>
     <%- include('../partials/navbar.ejs') %>
     <h1>Edit Event</h1>
+     <form action="/admin/edit-event/<%= locals.event._id %>" method="post">
+      <label>
+        <p>Enter Title</p>
+        <input type="text" value="<%= locals.event.title %>" minlength="2" name="title" id="title" required />
+      </label>
+        <p>Enter Short Description</p>
+        <input type="text" value="<%= locals.event.shortDescription %>" minlength="5" name="shortDescription" id="shortDescription" required />
+      </label>
+      <label>
+        <p>Enter Description</p>
+        <input type="text" value="<%= locals.event.description %>" name="description" id="description" minlength="20" required />
+      </label>
+      <label>
+        <p>Enter organiser's name</p>
+        <input type="text" value="<%= locals.event.organiser %>" minlength="2" name="organiser" id="organiser" required />
+      </label>
+      <label>
+        <p>Enter Venue</p>
+        <input type="text" value="<%= locals.event.venue %>" minlength="2" name="venue" id="venue" required />
+      </label>
+      <label>
+        <p>Enter venue capacity</p>
+        <input type="number" value="<%= locals.event.capacity %>" name="capacity" id="capacity" min="1" max="100000" required />
+      </label>
+      <label>
+        <p>Enter Start Date and time</p>
+        <input type="datetime-local" value="<%= locals.event.startTime %>" name="startTime" id="startDate" required />
+      </label>
+      <label>
+        <p>Enter End Date and time</p>
+        <input type="datetime-local" value="<%= locals.event.endTime %>" name="endTime" id="endDate" required />
+      </label>
+      <label>
+        <p>Enter Registration Deadline</p>
+        <input type="datetime-local" value="<%= locals.event.deadline %>" name="deadline" id="deadline" required />
+      </label>
+      <button type="submit">Update Event</button>
+    </form>
+    <div><%= locals.error %></div>
   </body>
 </html>

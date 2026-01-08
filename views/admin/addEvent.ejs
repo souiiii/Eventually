@@ -9,39 +9,57 @@
     <form action="/admin/create-event" method="post">
       <label>
         <p>Enter Title</p>
-        <input type="text" name="title" id="title" required></input>
+        <input type="text" name="title" id="title" required />
       </label>
       <label>
         <p>Enter Short Description</p>
-        <input type="text" name="shortDescription" id="shortDescription" required></input>
+        <input
+          type="text"
+          name="shortDescription"
+          id="shortDescription"
+          required
+        />
       </label>
       <label>
         <p>Enter Description</p>
-        <input type="text" name="description" id="description" minlength="20" required></input>
+        <input
+          type="text"
+          name="description"
+          id="description"
+          minlength="20"
+          required
+        />
       </label>
       <label>
         <p>Enter organiser's name</p>
-        <input type="text" name="organiser" id="organiser" required></input>
+        <input type="text" name="organiser" id="organiser" required />
       </label>
       <label>
         <p>Enter Venue</p>
-        <input type="text" name="venue" id="venue" required></input>
+        <input type="text" name="venue" id="venue" required />
       </label>
       <label>
         <p>Enter venue capacity</p>
-        <input type="number" name="capacity" id="capacity" min="1" max="100000" required></input>
+        <input
+          type="number"
+          name="capacity"
+          id="capacity"
+          min="1"
+          max="100000"
+          required
+        />
       </label>
       <label>
         <p>Enter Start Date and time</p>
-        <input type="datetime-local" name="startTime" id="startDate" required></input>
+        <input type="datetime-local" name="startTime" id="startDate" required />
       </label>
       <label>
         <p>Enter End Date and time</p>
-        <input type="datetime-local" name="endTime" id="endDate" required></input>
+        <input type="datetime-local" name="endTime" id="endDate" required />
       </label>
       <label>
         <p>Enter Registration Deadline</p>
-        <input type="datetime-local" name="deadline" id="deadline" required></input>
+        <input type="datetime-local" name="deadline" id="deadline" required />
       </label>
       <button type="submit">Create Event</button>
     </form>

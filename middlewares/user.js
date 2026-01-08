@@ -1,5 +1,6 @@
 import { getUser } from "../services/auth.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 export function checkAuth(req, res, next) {
   try {
@@ -31,6 +32,9 @@ export function checkAuthorization(roles) {
         !user.role ||
         typeof user.role !== "string"
       )
+        throw new Error("Invalid User");
+
+      if (!mongoose.Types.ObjectId.isValid(user._id))
         throw new Error("Invalid User");
 
       const validUser = await User.findById(user._id);
