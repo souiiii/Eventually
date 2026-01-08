@@ -1,5 +1,6 @@
 import express from "express";
 import Event from "../models/Event.js";
+import Registration from "../models/Registration.js";
 import mongoose from "mongoose";
 import validator from "validator";
 
@@ -303,14 +304,57 @@ router.get("/student-registrations/:id", async (req, res) => {
   }
 });
 
-router.post("/mark-attendance/:registrationId", async (req, res) => {
-  const id = req.params.registrationId;
+router.post("/mark-attendance/:registrationId_eventId", async (req, res) => {
+  try {
+    const ids = req.params.registrationId_eventId.trim();
+    const parts = ids.split("_");
+    if (parts.length !== 2) return res.status(400).send("Invalid Id");
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid Id");
+    const [registrationId, eventId] = parts;
+    const code = req.body.code?.trim().toUpperCase();
+    const now = new Date();
+
+    if (
+      !registrationId ||
+      !eventId ||
+      !mongoose.Types.ObjectId.isValid(registrationId) ||
+      !mongoose.Types.ObjectId.isValid(eventId)
+    ) {
+      return res.status(400).send("Invalid Id");
+    }
+
+    const event = await Event.findById(eventId, "startTime endTime").lean();
+    if (!event) return res.status(404).send("No such event found");
+
+    if (event.startTime > now || event.endTime < now)
+      return res.status(400).send("Event is not live");
+
+    if (!code) return res.status(400).send("Enter code before submitting");
+
+    if (!(code.length === 9)) return res.status(400).send("Enter valid code");
+
+    const registration = await Registration.findOneAndUpdate(
+      {
+        _id: registrationId,
+        attendanceStatus: "PENDING",
+        status: "REGISTERED",
+        eventId,
+        registrationCode: code,
+      },
+      { $set: { attendanceStatus: "ATTENDED" } },
+      { runValidators: true, new: true }
+    );
+
+    if (!registration)
+      return res.status(400).send("Invalid Request - Can't mark attendance");
+
+    return res.redirect(`/admin/student-registrations/${eventId}`);
+  } catch (err) {
+    console.log("Error: ", err.message);
+    if (err?.code === 11000)
+      console.log("Database error encountered, cannot write");
+    return res.status(500).render("common/server-error");
   }
-
-  return res.send("work in progress");
 });
 
 export default router;
