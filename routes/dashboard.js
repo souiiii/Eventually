@@ -33,7 +33,11 @@ router.get("/cancelled", async (req, res) => {
     .lean()
     .filter((r) => r.eventId);
 
-  return res.render("dashboard/cancelled", { cancelledEvents, now });
+  return res.render("dashboard/cancelled", {
+    cancelledEvents,
+    now,
+    user: req.user,
+  });
 });
 
 router.get("/registered", async (req, res) => {
@@ -77,7 +81,11 @@ router.get("/registered", async (req, res) => {
       return direction * (av - bv);
     });
 
-  return res.render("dashboard/registered", { registeredEvents, now });
+  return res.render("dashboard/registered", {
+    registeredEvents,
+    now,
+    user: req.user,
+  });
 });
 
 export default router;

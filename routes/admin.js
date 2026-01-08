@@ -7,7 +7,7 @@ import validator from "validator";
 const router = express.Router();
 
 router.get("/create-event", (req, res) => {
-  return res.render("admin/addEvent");
+  return res.render("admin/addEvent", { user: req.user });
 });
 
 router.post("/create-event", async (req, res) => {
@@ -24,9 +24,10 @@ router.post("/create-event", async (req, res) => {
       !body.startTime ||
       !body.endTime
     )
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Field data missing" });
+      return res.status(400).render("admin/addEvent", {
+        error: "Field data missing",
+        user: req.user,
+      });
     if (
       typeof body.title !== "string" ||
       typeof body.shortDescription !== "string" ||
@@ -50,9 +51,10 @@ router.post("/create-event", async (req, res) => {
         strictSeparator: true,
       })
     )
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid data sent" });
+      return res.status(400).render("admin/addEvent", {
+        error: "Invalid data sent",
+        user: req.user,
+      });
 
     const title = body.title.trim();
     const shortDescription = body.shortDescription.trim();
@@ -65,9 +67,10 @@ router.post("/create-event", async (req, res) => {
     const endTime = new Date(body.endTime.trim());
 
     if (!Number.isInteger(capacity) || capacity <= 0) {
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid capacity" });
+      return res.status(400).render("admin/addEvent", {
+        error: "Invalid capacity",
+        user: req.user,
+      });
     }
 
     const now = new Date();
@@ -76,18 +79,21 @@ router.post("/create-event", async (req, res) => {
         (d) => Number.isNaN(d.getTime()) || d < now
       )
     )
-      return res
-        .status(400)
-        .render("admin/addEvent", { error: "Invalid date sent" });
+      return res.status(400).render("admin/addEvent", {
+        error: "Invalid date sent",
+        user: req.user,
+      });
 
     if (startTime >= endTime) {
       return res.status(400).render("admin/addEvent", {
         error: "Start time must be before End Time",
+        user: req.user,
       });
     }
     if (startTime < deadline) {
       return res.status(400).render("admin/addEvent", {
         error: "Deadline must be before Start Time",
+        user: req.user,
       });
     }
 
@@ -127,6 +133,7 @@ router.get("/edit-event/:id", async (req, res) => {
         endTime: event.endTime.toISOString().slice(0, 16),
         deadline: event.deadline.toISOString().slice(0, 16),
       },
+      user: req.user,
     });
   } catch (err) {
     console.log("Error: ", err.message);
@@ -156,9 +163,11 @@ router.post("/edit-event/:id", async (req, res) => {
     };
 
     const renderEdit = (message) =>
-      res
-        .status(400)
-        .render("admin/editEvent", { event: baseEventForView, error: message });
+      res.status(400).render("admin/editEvent", {
+        event: baseEventForView,
+        error: message,
+        user: req.user,
+      });
 
     const now = Date.now();
 
@@ -299,9 +308,10 @@ router.get("/student-registrations/:id", async (req, res) => {
       status: "REGISTERED",
     }).populate("userId", "fullName email");
 
-    return res
-      .status(200)
-      .render("admin/eventRegistrations", { eventRegistrations });
+    return res.status(200).render("admin/eventRegistrations", {
+      eventRegistrations,
+      user: req.user,
+    });
   } catch (err) {
     console.log("Error: ", err.message);
     return res.status(500).render("common/server-error");

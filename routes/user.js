@@ -8,13 +8,13 @@ const router = express.Router();
 // Get Login
 
 router.get("/login", (req, res) => {
-  return res.render("user/login");
+  return res.render("user/login", { user: req.user });
 });
 
 // Get Signup
 
 router.get("/signup", (req, res) => {
-  return res.render("user/signup");
+  return res.render("user/signup", { user: req.user });
 });
 
 router.get("/logout", (req, res) => {
@@ -34,7 +34,7 @@ router.post("/signup", async (req, res) => {
     if (!body.email || !body.password || !body.fullName) {
       return res
         .status(400)
-        .render("user/signup", { error: "enter credentials" });
+        .render("user/signup", { error: "enter credentials", user: req.user });
     }
     if (
       typeof body.email !== "string" ||
@@ -43,7 +43,7 @@ router.post("/signup", async (req, res) => {
     ) {
       return res
         .status(400)
-        .render("user/signup", { error: "invalid types sent" });
+        .render("user/signup", { error: "invalid types sent", user: req.user });
     }
 
     const email = body.email.trim().toLowerCase();
@@ -51,14 +51,16 @@ router.post("/signup", async (req, res) => {
     const fullName = body.fullName.trim().toLowerCase();
 
     if (!validator.isEmail(email)) {
-      return res
-        .status(400)
-        .render("user/signup", { error: "invalid email format" });
+      return res.status(400).render("user/signup", {
+        error: "invalid email format",
+        user: req.user,
+      });
     }
 
     if (password.length < 8) {
       return res.status(400).render("user/signup", {
         error: "password must be at least 8 characters",
+        user: req.user,
       });
     }
 
@@ -76,11 +78,12 @@ router.post("/signup", async (req, res) => {
     if (err?.code === 11000)
       return res
         .status(409)
-        .render("user/signup", { error: "User already exits" });
+        .render("user/signup", { error: "User already exits", user: req.user });
     console.error("signup error:", err);
-    return res
-      .status(500)
-      .render("user/signup", { error: "Error while signing up" });
+    return res.status(500).render("user/signup", {
+      error: "Error while signing up",
+      user: req.user,
+    });
   }
 });
 

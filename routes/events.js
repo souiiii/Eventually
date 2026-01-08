@@ -43,6 +43,7 @@ router.get(
       now,
       registeredEvents,
       role,
+      user: req.user,
     });
   }
 );
@@ -64,7 +65,7 @@ router.get("/history", checkAuthorization(["ADMIN"]), async (req, res) => {
   const events = await Event.find({ endTime: { $lte: now } })
     .sort(sortObject)
     .lean();
-  return res.render("events/past", { events, now });
+  return res.render("events/past", { events, now, user: req.user });
 });
 
 router.get(
@@ -86,6 +87,7 @@ router.get(
       eventDetails,
       registrationDetails,
       role: req.user.role,
+      user: req.user,
     });
   }
 );
