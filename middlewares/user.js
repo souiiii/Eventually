@@ -9,19 +9,23 @@ export function checkAuth(req, res, next) {
     if (!token) return next();
     if (typeof token !== "string") throw new Error("Incorrect token type");
     const user = getUser(token);
-    if (typeof user !== "object") throw new Error("Invalid User");
+    if (!user || typeof user !== "object" || typeof user._id !== "string") {
+      throw new Error("Invalid token payload");
+    }
     req.user = user;
     return next();
   } catch (err) {
-    console.log("Error: Malicious Login Tried. ", err.message);
-    return res.status(400).redirect("/user/login");
+    console.log("Error: Invalid auth cookie.", err.message);
+    res.clearCookie("uid", { path: "/" });
+    req.user = null;
+    return next();
   }
 }
 
 export function checkAuthorization(roles) {
   return async (req, res, next) => {
     try {
-      if (!req.user) return res.status(400).redirect("/user/login");
+      if (!req.user) return res.status(401).redirect("/user/login");
       if (typeof req.user !== "object") throw new Error("Invalid User");
       const user = req.user;
       if (
@@ -39,7 +43,7 @@ export function checkAuthorization(roles) {
 
       const validUser = await User.findById(user._id);
       if (!validUser) throw new Error("Invalid User");
-      if (!roles.includes(user.role))
+      if (!roles.includes(validUser.role))
         return res.status(403).send("Unauthorized Access");
 
       return next();
