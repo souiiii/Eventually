@@ -15,12 +15,29 @@ router.get(
   "/discover",
   checkAuthorization(["ADMIN", "STUDENT"]),
   async (req, res) => {
-    const { role } = req.user.role;
+    const { role } = req.user;
     const now = new Date();
+    const { sort = "nearest", order = "asc" } = req.query;
+
+    const sortParameter = new Map();
+
+    // Add key-value pairs
+    sortParameter.set("nearest", "startTime");
+    sortParameter.set("deadline", "deadline");
+    sortParameter.set("capacity", "capacity");
+    sortParameter.set("upload-time", "updatedAt");
+
+    const field = sortParameter.get(sort) ?? "startTime";
+    const direction = order === "desc" ? -1 : 1;
+    const sortObject = { [field]: direction };
+
     const [events, registeredEvents] = await Promise.all([
-      Event.find({ endTime: { $gt: now } }).lean(),
+      Event.find({ endTime: { $gt: now } })
+        .sort(sortObject)
+        .lean(),
       Registration.find({ userId: req.user._id }).lean(),
     ]);
+
     return res.render("events/upcoming", {
       events,
       now,
@@ -32,7 +49,21 @@ router.get(
 
 router.get("/history", checkAuthorization(["ADMIN"]), async (req, res) => {
   const now = new Date();
-  const events = await Event.find({ endTime: { $lte: now } }).lean();
+  const { sort = "recent" } = req.query;
+
+  const sortParameter = new Map();
+
+  sortParameter.set("recent", ["startTime", "desc"]);
+  sortParameter.set("oldest", ["startTime", "asc"]);
+  sortParameter.set("upload-time", ["updatedAt", "desc"]);
+
+  const [field, dirText] = sortParameter.get(sort) ?? ["startTime", "desc"];
+  const direction = dirText === "desc" ? -1 : 1;
+  const sortObject = { [field]: direction };
+
+  const events = await Event.find({ endTime: { $lte: now } })
+    .sort(sortObject)
+    .lean();
   return res.render("events/past", { events, now });
 });
 
