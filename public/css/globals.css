@@ -1,3 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --bg-color: #f8f8fa;
+  --prim-color: #fdfdfd;
+  --secondary-color: #171717;
+  --tertiary-color: rgba(83, 97, 189, 0.09);
+  --accent-color: #5361bd;
+  --shadow-color: rgba(83, 97, 189, 0.15);
+
+  --prim-font: Poppins;
+}
+
 * {
   margin: 0;
   /* border: 0; */
@@ -6,41 +19,224 @@
 
 body {
   background: url("/images/background.png");
-  background-repeat: no-repeat;
+  background-color: var(--bg-color);
+  background-repeat: repeat-y;
   background-position: center;
   background-size: cover;
+  font-family: Poppins;
 }
 
 .navbar {
+  position: sticky;
+  top: 0.5rem;
   display: flex;
   gap: 1.5rem;
   width: 100%;
-  align-items: start;
-  justify-content: center;
+  margin-inline: auto;
+  max-width: 800px;
+  align-items: center;
+  justify-content: space-between;
   font-size: 1.5rem;
-  padding: 1rem;
+  padding-block: 1rem;
+  margin-bottom: 3rem;
 }
 
 .navbar a {
-  color: black;
+  color: var(--secondary-color);
   text-decoration: none;
 }
 
 .nav-logo-div {
-  width: clamp(50px, 100vw + 1rem, 80px);
+  /* width: clamp(5rem, 14vw + 1rem, 7rem); */
+
+  width: 7rem;
+  height: 3rem;
+  min-width: 5rem;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav-logo-div img {
+  border-radius: 2rem;
+  box-shadow: 0px 4px 6px var(--shadow-color);
   width: 100%;
+}
+
+.nav-time-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--prim-color);
+  border-radius: 2rem;
+  box-shadow: 0px 4px 6px var(--shadow-color);
+}
+
+.nav-home {
+  background-color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  border-radius: 2rem;
+}
+
+.nav-home span {
+  font-size: 0.85rem;
+  color: var(--prim-color);
+  font-weight: 500;
+}
+
+.nav-home img {
+  height: 1.4rem;
+}
+
+.nav-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem 0.5rem 0.75rem;
+}
+
+.nav-menu-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: rgba(83, 97, 189, 0.09);
+  border-radius: 2rem;
+  height: 100%;
+}
+
+.nav-menu-div a {
+  padding: 0.55rem 1rem;
+  height: 100%;
+}
+
+.nav-selected {
+  background-color: var(--secondary-color);
+  color: var(--prim-color) !important ;
+  border-radius: 2rem;
+}
+
+.nav-auth-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.nav-login a {
+  transition: all 0.3s ease;
+}
+
+.nav-login:hover a {
+  color: #000000;
+}
+
+.nav-signup {
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+  background-color: var(--prim-color);
+  box-shadow: 0px 4px 6px var(--shadow-color);
+  border-radius: 2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-signup:hover {
+  background-color: var(--accent-color);
+  color: var(--prim-color);
 }
 
 .main {
   width: 100%;
   max-width: 800px;
-  border: 1px solid red;
+  min-height: 2000px;
+  /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
   margin-inline: auto;
+  position: relative;
+}
+
+.disappear {
+  display: none;
+}
+
+.fixed-cen {
+  position: sticky;
+  top: 1rem;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.fixed-right {
+  max-width: 800px;
+  /* width: 100%; */
+  position: fixed;
+  bottom: 3rem;
+  right: 50%;
+  transform: translateX(50%);
+  height: auto !important;
+  display: flex;
+  justify-content: end;
+}
+
+.fixed-right div {
+  padding: 0.5rem 0.75rem;
+  border-radius: 50%;
+  background-color: var(--prim-color);
+  box-shadow: 0px 6px 6px var(--shadow-color);
+}
+
+@media (max-width: 1000px) {
+  .main {
+    padding-inline: 3rem;
+  }
+
+  .fixed-right {
+    height: auto !important;
+    width: auto;
+    left: 230%;
+    bottom: 4rem;
+  }
+
+  .fixed-center {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 6px 6px var(--shadow-color);
+    height: auto;
+  }
+}
+
+@media (max-width: 804px) {
+  .fixed-right {
+    left: calc(36vw + 5rem);
+  }
+}
+
+@media (max-width: 580px) {
+  .nav-logo-div {
+    display: none;
+  }
+
+  .main {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-time {
+    display: none;
+  }
 }

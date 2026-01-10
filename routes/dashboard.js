@@ -38,6 +38,7 @@ router.get("/cancelled", async (req, res) => {
     cancelledEvents,
     now,
     user: req.user,
+    url: "/dashboard",
   });
 });
 
@@ -86,6 +87,7 @@ router.get("/registered", async (req, res) => {
     registeredEvents,
     now,
     user: req.user,
+    url: "/dashboard",
   });
 });
 

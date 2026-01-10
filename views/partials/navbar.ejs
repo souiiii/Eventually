@@ -1,20 +1,70 @@
 <div class="navbar">
-  <div class="nav-logo-div"><img src="/images/navbar-logo.png" /></div>
+  <a href="/" class="nav-logo-div"><img src="/images/navbar-logo.png" /></a>
   <% if(!locals.user) { %>
-  <div><a href="/">Home</a></div>
-  <div>
-    <div>02:59 PM</div>
+  <div class="nav-time-div">
+    <a href="/" class="nav-home"
+      ><img
+        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZGZkZmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1ob3VzZS1pY29uIGx1Y2lkZS1ob3VzZSI+PHBhdGggZD0iTTE1IDIxdi04YTEgMSAwIDAgMC0xLTFoLTRhMSAxIDAgMCAwLTEgMXY4Ii8+PHBhdGggZD0iTTMgMTBhMiAyIDAgMCAxIC43MDktMS41MjhsNy02YTIgMiAwIDAgMSAyLjU4MiAwbDcgNkEyIDIgMCAwIDEgMjEgMTB2OWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMnoiLz48L3N2Zz4="
+    /></a>
+    <div class="nav-time">02:59 PM</div>
   </div>
-  <div><a href="/user/login">Login</a></div>
-  <div><a href="/user/signup">Signup</a></div>
+  <div class="nav-auth-div">
+    <div class="nav-login"><a href="/user/login">Login</a></div>
+    <a
+      class="nav-signup <%= locals.url==='/signup' && selected%>"
+      href="/user/signup"
+    >
+      <div>Sign up</div>
+    </a>
+  </div>
   <% } %> <% if(locals.user) { %>
-  <div><a href="/events/discover">Discover</a></div>
-  <% if(locals.user.role==='STUDENT') { %>
-  <div><a href="/dashboard">Dashboard</a></div>
-  <% } %> <% if(locals.user.role==='ADMIN') { %>
-  <div><a href="/events/history">History</a></div>
-  <div><a href="/admin/create-event">Create Event</a></div>
-  <% } %>
-  <div><a href="/user/logout">Logout</a></div>
+  <div class="nav-time-div">
+    <a class="nav-home"
+      ><img
+        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGREZERkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1sZWFmLWljb24gbHVjaWRlLWxlYWYiPjxwYXRoIGQ9Ik0xMSAyMEE3IDcgMCAwIDEgOS44IDYuMUMxNS41IDUgMTcgNC40OCAxOSAyYzEgMiAyIDQuMTggMiA4IDAgNS41LTQuNzggMTAtMTAgMTBaIi8+PHBhdGggZD0iTTIgMjFjMC0zIDEuODUtNS4zNiA1LjA4LTZDOS41IDE0LjUyIDEyIDEzIDEzIDEyIi8+PC9zdmc+"
+      /><span>&nbsp; hey <%= locals.user.fullName %>&nbsp;</span></a
+    >
+    <div class="nav-time">02:59 PM</div>
+    <div class="nav-menu-div fixed-center">
+      <% const selected='nav-selected'; const appear = 'fixed-right' %> <%
+      if(locals.user.role==='STUDENT') { %>
+      <a
+        class="<%= locals.url==='/discover' && selected%>"
+        href="/events/discover"
+        >Discover</a
+      >
+      <a class="<%= locals.url==='/dashboard' && selected%>" href="/dashboard"
+        >Dashboard</a
+      >
+      <% } %> <% if(locals.user.role==='ADMIN') { %>
+      <a
+        class="<%= locals.url==='/discover' && selected%>"
+        href="/events/discover"
+        >Manage</a
+      >
+      <a
+        class="<%= locals.url==='/history' && selected%>"
+        href="/events/history"
+        >History</a
+      >
+      <a
+        class="disappear <%= (locals.url==='/' || locals.url==='/discover' || locals.url==='/history')&& appear%>"
+        href="/admin/create-event"
+      >
+        <div>
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1MzYxYmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1mZWF0aGVyLWljb24gbHVjaWRlLWZlYXRoZXIiPjxwYXRoIGQ9Ik0xMi42NyAxOWEyIDIgMCAwIDAgMS40MTYtLjU4OGw2LjE1NC02LjE3MmE2IDYgMCAwIDAtOC40OS04LjQ5TDUuNTg2IDkuOTE0QTIgMiAwIDAgMCA1IDExLjMyOFYxOGExIDEgMCAwIDAgMSAxeiIvPjxwYXRoIGQ9Ik0xNiA4IDIgMjIiLz48cGF0aCBkPSJNMTcuNSAxNUg5Ii8+PC9zdmc+"
+          />
+        </div>
+      </a>
+      <% } %>
+    </div>
+  </div>
+  <div class="nav-auth-div">
+    <a class="nav-signup" href="/user/logout">
+      <div>Logout</div>
+    </a>
+  </div>
+
   <% } %>
 </div>
