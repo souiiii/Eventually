@@ -225,7 +225,7 @@ body {
   }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 630px) {
   .nav-logo-div {
     display: none;
   }
@@ -235,7 +235,7 @@ body {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
   .nav-time {
     display: none;
   }
