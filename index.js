@@ -33,7 +33,7 @@ app.use("/admin", checkAuthorization(["ADMIN"]), adminRouter);
 connectToMongoose(mongoPath)
   .then(() => {
     console.log("database connected");
-    app.listen(PORT, () => console.log("server started"));
+    app.listen(PORT, "0.0.0.0", () => console.log("server started"));
   })
   .catch((err) => {
     console.error("error connecting to database", err);

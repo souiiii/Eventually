@@ -12,9 +12,31 @@
 }
 
 * {
+  border: 0;
   margin: 0;
-  /* border: 0; */
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+h1,
+h2,
+p {
+  user-select: text;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body,
+html {
+  background: transparent;
+  background-color: transparent;
+  overscroll-behavior: none;
+  scroll-behavior: auto;
+  height: 100%;
 }
 
 body {
@@ -29,7 +51,7 @@ body {
 .main {
   width: 100%;
   max-width: 800px;
-  min-height: 2000px;
+  height: 2000px;
   /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
@@ -37,6 +59,7 @@ body {
   align-items: center;
   margin-inline: auto;
   position: relative;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Navbar */
@@ -229,7 +252,7 @@ body {
 
   .fixed-center {
     position: fixed;
-    bottom: 1rem;
+    bottom: 2.5rem;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 0px 6px 6px var(--shadow-color);
