@@ -1,15 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../partials/header.ejs') %>
-  </head>
-  <body>
-    <div class="main">
-      <%- include('../partials/navbar.ejs') %>
+
+<head>
+  <%- include('../partials/header.ejs') %>
+</head>
+
+<body>
+
+
+  <div class="main">
+    <%- include('../partials/navbar.ejs') %>
       <div class="heading-div">
         <h1 class="heading">Upcoming Events</h1>
       </div>
-    </div>
-    <%- include('../partials/footer.ejs') %>
-  </body>
+      <div class="event-list-div">
+        <% locals.events.forEach(event=> { %>
+          <% const startDate=new Date(event.startTime); const endDate=new Date(event.endTime); // Helpers const
+            pad2=(n)=> String(n).padStart(2, '0');
+            const to12Hour = (d) => {
+            const h24 = d.getHours();
+            const ap = h24 < 12 ? 'AM' : 'PM' ; const h12=(h24 % 12) || 12; return `${h12}:${pad2(d.getMinutes())}
+              ${ap}`; }; const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; const
+              startTimeText=to12Hour(startDate); const endTimeText=to12Hour(endDate); const
+              startDateText=`${pad2(startDate.getDate())} ${months[startDate.getMonth()]}`; %>
+
+
+              <div class="event-div">
+                <div class="event-time-div">
+                  <div class="event-time-internal-div">
+                    <div class="event-start-time">
+                      <%= startTimeText %>
+                    </div>
+                    <div class="event-start-date">
+                      <%=startDateText%>
+                    </div>
+                    <div class="event-end-time">
+                      <%= endTimeText %>
+                    </div>
+                    <img class="dotted-line" src="/images\dotted-line.png" />
+                  </div>
+                </div>
+                <div class="event-desc-div">
+                  <div class="event-title">
+                    <%= event.title %>
+                  </div>
+                  <div class="event-short-description">
+                    <%= event.shortDescription %>
+                  </div>
+                </div>
+
+                <% if(event.startTime <=locals.now && event.endTime>= now) { %>
+                  <% if(locals.role==='ADMIN' ) { %>
+                    <div class="statusOk">MARK ATTENDANCE-></div>
+                    <% } %>
+                      <div class="live-meter">
+                        <span>LIVE&nbsp;</span>
+                        <img
+                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1NEM3OEQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1yYWRpby1pY29uIGx1Y2lkZS1yYWRpbyI+PHBhdGggZD0iTTE2LjI0NyA3Ljc2MWE2IDYgMCAwIDEgMCA4LjQ3OCIvPjxwYXRoIGQ9Ik0xOS4wNzUgNC45MzNhMTAgMTAgMCAwIDEgMCAxNC4xMzQiLz48cGF0aCBkPSJNNC45MjUgMTkuMDY3YTEwIDEwIDAgMCAxIDAtMTQuMTM0Ii8+PHBhdGggZD0iTTcuNzUzIDE2LjIzOWE2IDYgMCAwIDEgMC04LjQ3OCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjIiLz48L3N2Zz4=" />
+                      </div>
+                      <% } %>
+                        <% if(locals.role==='STUDENT' ) { %>
+                          <% const registeredEventsIds=locals.registeredEvents.filter(m=> m.status ===
+                            'REGISTERED').map(m => m.eventId.toString());
+                            const cancelledEventsIds=locals.registeredEvents.filter(m=> m.status ===
+                            'CANCELLED').map(m => m.eventId.toString()); %>
+                            <% if(registeredEventsIds.includes(event._id.toString())) { %>
+                              <div class="statusOk">REGISTERED</div>
+                              <% } %>
+                                <% if(cancelledEventsIds.includes(event._id.toString())) { %>
+                                  <div class="statusNotOk">CANCELLED</div>
+                                  <% } %>
+                                    <% } %>
+
+              </div>
+              <% }) %>
+      </div>
+  </div>
+  <%- include('../partials/footer.ejs') %>
+</body>
+
 </html>
