@@ -4,18 +4,23 @@
   = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
   'Nov', 'Dec']; const monthName = months[date.getMonth()]; const day =
   String(date.getDate()).padStart(2, '0'); return `${dayName}, ${monthName}
-  ${day}`; } const today = new Date(); const now = formatDateWithoutYear(today)
+  ${day}`; } const today = new Date(); const now = formatDateWithoutYear(today);
   %>
-  <a href="/" class="nav-logo-div"><img src="/images/navbar-logo.png" /></a>
+
+  <a href="/" class="nav-logo-div">
+    <img src="/images/navbar-logo.png" />
+  </a>
+
   <% if(!locals.user) { %>
   <div class="nav-time-div">
-    <a href="/" class="nav-home"
-      ><img
+    <a href="/" class="nav-home">
+      <img
         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZGZkZmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1ob3VzZS1pY29uIGx1Y2lkZS1ob3VzZSI+PHBhdGggZD0iTTE1IDIxdi04YTEgMSAwIDAgMC0xLTFoLTRhMSAxIDAgMCAwLTEgMXY4Ii8+PHBhdGggZD0iTTMgMTBhMiAyIDAgMCAxIC43MDktMS41MjhsNy02YTIgMiAwIDAgMSAyLjU4MiAwbDcgNkEyIDIgMCAwIDEgMjEgMTB2OWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMnoiLz48L3N2Zz4="
-    /></a>
-
+      />
+    </a>
     <div class="nav-time"><%= now %></div>
   </div>
+
   <div class="nav-auth-div">
     <div class="nav-login"><a href="/user/login">Login</a></div>
     <a
@@ -27,18 +32,25 @@
   </div>
   <% } %> <% if(locals.user) { %>
   <div class="nav-time-div">
-    <a class="nav-home"
-      ><img
+    <a class="nav-home">
+      <img
         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGREZERkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1sZWFmLWljb24gbHVjaWRlLWxlYWYiPjxwYXRoIGQ9Ik0xMSAyMEE3IDcgMCAwIDEgOS44IDYuMUMxNS41IDUgMTcgNC40OCAxOSAyYzEgMiAyIDQuMTggMiA4IDAgNS41LTQuNzggMTAtMTAgMTBaIi8+PHBhdGggZD0iTTIgMjFjMC0zIDEuODUtNS4zNiA1LjA4LTZDOS41IDE0LjUyIDEyIDEzIDEzIDEyIi8+PC9zdmc+"
-      /><span
-        >&nbsp; hey <%=
-        locals.user.fullName.length<9?locals.user.fullName:locals.user.fullName.slice(0,7)+'..'
-        %>&nbsp;</span
-      ></a
-    >
+      />
+      <% const ignore =
+      ['mohammad','muhammad','md','mohd','syed','sayed','shaikh','sheikh','abdul','abdur'];
+      const slices = locals.user.fullName.trim().split(/\s+/); let realName =
+      slices[0]; if (ignore.includes(realName.toLowerCase()) && slices.length >
+      1) { realName = slices[1]; } %>
+      <span
+        >&nbsp; hey <%= realName.length < 9 ? realName : realName.slice(0,7) +
+        '..' %>&nbsp;</span
+      >
+    </a>
+
     <div class="nav-time"><%= now %></div>
+
     <div class="nav-menu-div fixed-center">
-      <% const selected='nav-selected'; const appear = 'fixed-right' %> <%
+      <% const selected='nav-selected'; const appear='fixed-right'; %> <%
       if(locals.user.role==='STUDENT') { %>
       <a
         class="<%= locals.url==='/discover' && selected%>"
@@ -60,7 +72,7 @@
         >History</a
       >
       <a
-        class="disappear <%= (locals.url==='/' || locals.url==='/discover' || locals.url==='/history')&& appear%>"
+        class="disappear <%= (locals.url==='/' || locals.url==='/discover' || locals.url==='/history') && appear %>"
         href="/admin/create-event"
       >
         <div>
@@ -72,11 +84,11 @@
       <% } %>
     </div>
   </div>
+
   <div class="nav-auth-div">
     <a class="nav-signup" href="/user/logout">
       <div>Logout</div>
     </a>
   </div>
-
   <% } %>
 </div>

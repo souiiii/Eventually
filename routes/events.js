@@ -17,7 +17,10 @@ router.get(
   async (req, res) => {
     const { role } = req.user;
     const now = new Date();
-    const { sort = "nearest", order = "asc" } = req.query;
+    let sort = req.query?.sort;
+    if (!sort) sort = "nearest_asc";
+    let sortt = sort.split("_")[0];
+    let order = sort.split("_")[1];
 
     const sortParameter = new Map();
 
@@ -27,7 +30,7 @@ router.get(
     sortParameter.set("capacity", "capacity");
     sortParameter.set("upload-time", "updatedAt");
 
-    const field = sortParameter.get(sort) ?? "startTime";
+    const field = sortParameter.get(sortt) ?? "startTime";
     const direction = order === "desc" ? -1 : 1;
     const sortObject = { [field]: direction };
 
@@ -43,6 +46,7 @@ router.get(
       now,
       registeredEvents,
       role,
+      select: sortt,
       user: req.user,
       url: "/discover",
     });
@@ -69,6 +73,7 @@ router.get("/history", checkAuthorization(["ADMIN"]), async (req, res) => {
   return res.render("events/past", {
     events,
     now,
+    select: sort,
     user: req.user,
     url: "/history",
   });
