@@ -4,10 +4,90 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
-    <div class="main">
+     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Registered</h1>
+
+      <div class="heading-div">
+        <% const
+          attendedEventsIds = locals.registeredEvents .filter(m => m.attendanceStatus
+          === 'ATTENDED') .map(m => m.eventId.toString()); const
+          pendingEventsIds = locals.registeredEvents .filter(m => m.status ===
+          'PENDING' && (locals.now >= new Date(m.startTime) && locals.now <= new Date(m.endTime))) .map(m => m.eventId.toString());
+          const
+          notAttendedEventsIds = locals.registeredEvents .filter(m => m.status ===
+          'PENDING' && (locals.now >= new Date(m.endTime))) .map(m => m.eventId.toString());
+          
+          const
+        pad2 = n => String(n).padStart(2, '0'); const to12Hour = d => { const
+        h24 = d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM'; const h12 = (h24
+        % 12) || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
+        months = [ 'Jan','Feb','Mar','Apr','May','Jun',
+        'Jul','Aug','Sep','Oct','Nov','Dec' ];%> 
+        <h1 class="heading">My Space</h1>
+        <form action="/dashboard/registered" method="get" class="sort-by-div">
+          <label>
+            <span>Sort by:</span>
+            <select class="selected" onchange="this.form.submit()" name="sort">
+              <option value="recent" <%= locals.select=== 'recent' ? 'selected' : '' %> >recent</option>
+              <option value="oldest"  <%= locals.select=== 'oldest' ? 'selected' : '' %> >oldest</option>
+            </select>
+          </label>
+        </form>
+      </div>
+
+      <div class="sub-nav-div">
+        <a href="/dashboard/registered" class="sub-nav-button <%= locals.uri ==='REGISTERED'?'registered':'' %>">Registered</a>
+        <a href="/dashboard/cancelled" class="sub-nav-button <%= locals.uri ==='CANCELLED'?'cancelled':'' %>">Cancelled</a>
+      </div>
+
+      <div class="event-list-div">
+        <% locals.registeredEvents.forEach(event => { %> <% const startDate = new
+        Date(event.startTime); const endDate = new Date(event.endTime);  const startTimeText =
+        to12Hour(startDate); const endTimeText = to12Hour(endDate); const
+        startDateText = `${pad2(startDate.getDate())}
+        ${months[startDate.getMonth()]}`; %>
+
+        <div class="event-div">
+          <div class="event-time-div">
+            <div class="event-time-internal-div">
+              <div class="event-start-time"><%= startTimeText %></div>
+              <div class="event-start-date"><%= startDateText %></div>
+              <div class="event-end-time"><%= endTimeText %></div>
+              <img class="dotted-line" src="/images/dotted-line.png" />
+            </div>
+          </div>
+
+          <div class="event-desc-div">
+            <div class="event-title"><%= event.title %></div>
+            <div class="event-short-description">
+              <%= event.shortDescription %>
+            </div>
+          </div>
+
+          <% if (event.startTime <= locals.now && event.endTime >= locals.now) {
+          %> 
+
+          <div class="live-meter">
+            <span>LIVE&nbsp;</span>
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1NEM3OEQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1yYWRpby1pY29uIGx1Y2lkZS1yYWRpbyI+PHBhdGggZD0iTTE2LjI0NyA3Ljc2MWE2IDYgMCAwIDEgMCA4LjQ3OCIvPjxwYXRoIGQ9Ik0xOS4wNzUgNC45MzNhMTAgMTAgMCAwIDEgMCAxNC4xMzQiLz48cGF0aCBkPSJNNC45MjUgMTkuMDY3YTEwIDEwIDAgMCAxIDAtMTQuMTM0Ii8+PHBhdGggZD0iTTcuNzUzIDE2LjIzOWE2IDYgMCAwIDEgMC04LjQ3OCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjIiLz48L3N2Zz4="
+            />
+          </div>
+
+          <% } %>  <% if
+          (attendedEventsIds.includes(event._id.toString())) { %>
+          <div class="statusOk">ATTENDED</div>
+          <% } %> <% if (pendingEventsIds.includes(event._id.toString())) { %>
+          <div class="statusNotOk">ATTENDANCE PENDING</div>
+          <% } %>  <% if (notAttendedEventsIds.includes(event._id.toString())) { %>
+          <div class="statusNotOk">DID NOT ATTEND</div>
+          <% } %>
+        </div>
+
+        <% }) %>
+      </div>
     </div>
+
     <%- include('../partials/footer.ejs') %>
   </body>
 </html>

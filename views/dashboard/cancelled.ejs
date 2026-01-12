@@ -6,7 +6,58 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Cancelled</h1>
+
+     
+      <div class="heading-div">
+        <h1 class="heading">My Space</h1>
+        <form action="/dashboard/cancelled" method="get" class="sort-by-div">
+          <label>
+            <span>Sort by:</span>
+             <select class="selected" name="sort"  onchange="this.form.submit()">
+              <option value="recent" <%= locals.select=== 'recent' ? 'selected' : '' %> >recent</option>
+              <option value="oldest"  <%= locals.select=== 'oldest' ? 'selected' : '' %> >oldest</option> 
+            </select>
+          </label>
+        </form>
+      </div>
+
+      
+        <div class="sub-nav-div">
+        <a href="/dashboard/registered" class="sub-nav-button <%= locals.uri ==='REGISTERED'?'registered':'' %>">Registered</a>
+        <a href="/dashboard/cancelled" class="sub-nav-button <%= locals.uri ==='CANCELLED'?'cancelled':'' %>">Cancelled</a>
+      </div>
+
+      
+      <div class="event-list-div">
+        <% locals.cancelledEvents.forEach(event=> { %> <% const startDate=new
+        Date(event.startTime); const endDate=new Date(event.endTime); pad2=(n)=>
+        String(n).padStart(2, '0'); const to12Hour = (d) => { const h24 =
+        d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM' ; const h12=(h24 % 12)
+        || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
+        months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const startTimeText=to12Hour(startDate); const
+        endTimeText=to12Hour(endDate); const
+        startDateText=`${pad2(startDate.getDate())}
+        ${months[startDate.getMonth()]}`; %>
+
+        <div class="event-div">
+          <div class="event-time-div">
+            <div class="event-time-internal-div">
+              <div class="event-start-time"><%= startTimeText %></div>
+              <div class="event-start-date"><%=startDateText%></div>
+              <div class="event-end-time"><%= endTimeText %></div>
+              <img class="dotted-line" src="/images\dotted-line.png" />
+            </div>
+          </div>
+          <div class="event-desc-div">
+            <div class="event-title"><%= event.title %></div>
+            <div class="event-short-description">
+              <%= event.shortDescription %>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>

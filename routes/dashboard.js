@@ -38,6 +38,8 @@ router.get("/cancelled", async (req, res) => {
     cancelledEvents,
     now,
     user: req.user,
+    select: sort,
+    uri: "CANCELLED",
     url: "/dashboard",
   });
 });
@@ -87,7 +89,9 @@ router.get("/registered", async (req, res) => {
     registeredEvents,
     now,
     user: req.user,
+    select: sort,
     url: "/dashboard",
+    uri: "REGISTERED",
   });
 });
 

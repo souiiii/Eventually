@@ -81,7 +81,6 @@ body {
   padding-block: 1rem;
   margin-bottom: 2rem;
   z-index: 1000;
-  transition: all 0.3s ease;
 }
 
 .navbar a {
@@ -113,6 +112,8 @@ body {
   justify-content: center;
   background-color: var(--prim-color);
   border-radius: 2rem;
+  transition: all 0.2s ease;
+
   box-shadow: 0px 4px 6px var(--shadow-color);
 }
 
@@ -176,7 +177,7 @@ body {
 }
 
 .nav-login a {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-login:hover a {
@@ -189,7 +190,7 @@ body {
   background-color: var(--prim-color);
   box-shadow: 0px 4px 6px var(--shadow-color);
   border-radius: 2rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-signup:hover {
@@ -235,10 +236,11 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  padding: 0.2rem 10px 0.2rem 15px;
+  padding: 0.2rem 15px 0.2rem 20px;
   border-radius: 999px;
   border: 1px solid #dcdcff;
   background-color: #fff;
+  box-shadow: 0 4px 4px var(--shadow-color);
 
   font-size: 14px;
   font-weight: 500;
@@ -281,7 +283,7 @@ body {
   padding: 1.3rem 1.5rem 1.3rem 1rem;
   position: relative;
   border: 1px solid var(--shadow-color);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .event-div:hover {
@@ -395,7 +397,57 @@ body {
   color: var(--red-color);
 }
 
+/* Dashboard */
+
+.sub-nav-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 6px 6px var(--shadow-color);
+  border: 1px solid var(--shadow-color);
+  background-color: var(--prim-color);
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.sub-nav-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.registered,
+.cancelled {
+  background-color: var(--accent-color);
+  color: var(--prim-color);
+}
+
+.registered {
+  border-bottom-left-radius: 1rem;
+  border-top-left-radius: 1rem;
+}
+
+.cancelled {
+  border-bottom-right-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
 /* Misc */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: rgb(65, 70, 162);
+}
 
 .disappear {
   display: none;
@@ -425,6 +477,11 @@ body {
   border-radius: 50%;
   background-color: var(--prim-color);
   box-shadow: 0px 6px 6px var(--shadow-color);
+  transition: all 0.2s ease;
+}
+.fixed-right div:hover {
+  /* background-color: #f2f2f4; */
+  scale: 1.2;
 }
 
 @media (max-width: 1000px) {

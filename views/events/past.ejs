@@ -11,13 +11,12 @@
         <form action="/events/history" method="get" class="sort-by-div">
           <label>
             <span>Sort by:</span>
-            <select class="selected" name="sort">
+            <select class="selected" onchange="this.form.submit()" name="sort">
               <option value="recent" <%= locals.select=== 'recent' ? 'selected' : '' %> >recent</option>
               <option value="oldest"  <%= locals.select=== 'oldest' ? 'selected' : '' %> >oldest</option>
               <option value="upload-time" <%= locals.select=== 'upload-time' ? 'selected' : '' %> >upload time</option>
             </select>
           </label>
-          <button type="submit">sort</button>
         </form>
       </div>
       <div class="event-list-div">

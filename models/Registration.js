@@ -26,7 +26,7 @@ const registrationSchema = new mongoose.Schema(
     attendanceStatus: {
       type: String,
       required: true,
-      enum: ["PENDING", "ATTENDED", "NOTATTENDED"],
+      enum: ["PENDING", "ATTENDED"],
       default: "PENDING",
     },
   },
