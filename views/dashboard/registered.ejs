@@ -40,14 +40,14 @@
         <a href="/dashboard/cancelled" class="sub-nav-button <%= locals.uri ==='CANCELLED'?'cancelled':'' %>">Cancelled</a>
       </div>
 
-      <div class="event-list-div">
+      <div  class="event-list-div">
         <% locals.registeredEvents.forEach(event => { %> <% const startDate = new
         Date(event.startTime); const endDate = new Date(event.endTime);  const startTimeText =
         to12Hour(startDate); const endTimeText = to12Hour(endDate); const
         startDateText = `${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
 
-        <div class="event-div">
+        <a href="/events/<%= event._id %>" class="event-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
@@ -82,7 +82,7 @@
           <% } %>  <% if (notAttendedEventsIds.includes(event._id.toString())) { %>
           <div class="statusNotOk">DID NOT ATTEND</div>
           <% } %>
-        </div>
+        </a>
 
         <% }) %>
       </div>

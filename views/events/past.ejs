@@ -31,7 +31,7 @@
         startDateText=`${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
 
-        <div class="event-div">
+        <a href="/events/<%= event._id %>" class="event-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
@@ -46,7 +46,7 @@
               <%= event.shortDescription %>
             </div>
           </div>
-        </div>
+        </a>
         <% }) %>
       </div>
     </div>

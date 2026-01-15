@@ -29,7 +29,7 @@
 
       
       <div class="event-list-div">
-        <% locals.cancelledEvents.forEach(event=> { %> <% const startDate=new
+        <% locals.cancelledEvents.forEach(event=> { %> <a% const startDate=new
         Date(event.startTime); const endDate=new Date(event.endTime); pad2=(n)=>
         String(n).padStart(2, '0'); const to12Hour = (d) => { const h24 =
         d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM' ; const h12=(h24 % 12)
@@ -40,7 +40,7 @@
         startDateText=`${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
 
-        <div class="event-div">
+        <a href="/events/<%= event._id %>" class="event-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
@@ -55,7 +55,7 @@
               <%= event.shortDescription %>
             </div>
           </div>
-        </div>
+        </a>
         <% }) %>
       </div>
     </div>

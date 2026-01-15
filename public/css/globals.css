@@ -282,6 +282,7 @@ body {
   position: relative;
   border: 1px solid var(--shadow-color);
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .event-div:hover {
