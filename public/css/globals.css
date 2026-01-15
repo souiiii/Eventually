@@ -213,51 +213,49 @@ body {
   font-size: 1rem;
   color: var(--secondary-color);
   font-weight: 600;
-  line-height: 200%;
+  line-height: 300%;
 }
-
 .sort-by-div {
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Add spacing between "SORT BY:" and dropdown */
 }
 
-.sort-by-div button {
-  padding: 0.2rem 1rem;
-  background-color: var(--accent-color);
-  color: var(--prim-color);
-  border-radius: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
+.sort-by-div label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Add spacing between span and select */
 }
 
 .selected {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
-  padding: 0.2rem 15px 0.2rem 20px;
+  padding: 0.4rem 2rem 0.4rem 1rem; /* Adjusted padding */
   border-radius: 999px;
-  border: 1px solid #dcdcff;
-  background-color: #fff;
+  border: 1px solid var(--shadow-color);
+  background-color: var(--prim-color);
   box-shadow: 0 4px 4px var(--shadow-color);
-
-  font-size: 14px;
+  font-size: 0.75rem; /* Match parent size */
   font-weight: 500;
-  color: #333;
-
+  color: var(--secondary-color);
+  font-family: Poppins; /* Add this */
+  text-transform: lowercase; /* Add this since options are lowercase */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 14px;
-
+  background-position: right 10px center; /* Adjusted position */
+  background-size: 12px;
   cursor: pointer;
+  min-width: 100px; /* Add minimum width */
 }
 
 .selected:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(108, 108, 255, 0.15);
+  /* box-shadow: 0 0 0 1px var(--shadow-color); */
 }
 
 .event-list-div {
@@ -308,6 +306,7 @@ body {
   align-items: center;
   flex-direction: column;
   width: 100%;
+  gap: 1rem;
   height: 100%;
 }
 

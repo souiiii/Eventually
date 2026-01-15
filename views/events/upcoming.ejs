@@ -23,7 +23,8 @@
         <h1 class="heading">Upcoming Events</h1>
         <form action="/events/discover" method="get" class="sort-by-div">
           <label>
-            <span>Sort by:</span>
+           <span>Sort by:&nbsp;</span>  
+              
             <select class="selected" onchange="this.form.submit()" name="sort">
               <option value="nearest_asc" <%= locals.select=== 'nearest' ? 'selected' : '' %> >nearest</option>
               <option value="deadline_asc"  <%= locals.select=== 'deadline' ? 'selected' : '' %> >deadline</option>
