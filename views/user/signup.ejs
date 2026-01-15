@@ -6,30 +6,56 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Signup Page</h1>
-      <div>
-        <form action="/user/Signup" method="post">
-          <label>
-            <h2>Enter Name</h2>
-            <input required type="fullName" name="fullName" id="fullName" />
-          </label>
-          <label>
-            <h2>Enter Email</h2>
-            <input required type="email" name="email" id="email" />
-          </label>
-          <label>
-            <h2>Enter Password</h2>
-            <input
-              required
-              min="8"
-              type="password"
-              name="password"
-              id="password"
-            />
-          </label>
-          <button type="submit">Signup</button>
-        </form>
+      <div class="box">
+        <h1 class="headingg">Join <span>Eventually</span></h1>
+        <div>
+          <form class="form" action="/user/Signup" method="post">
+            <label>
+              <input
+                class="input"
+                required
+                placeholder="Display Name"
+                type="fullName"
+                value="<%= locals.body?.fullName %>"
+                name="fullName"
+                id="fullName"
+              />
+            </label>
+            <label>
+              <input
+                class="input"
+                placeholder="Email Address"
+                required
+                type="email"
+                name="email"
+                value="<%= locals.body?.email %>"
+                id="email"
+              />
+            </label>
+            <label>
+              <input
+                class="input"
+                required
+                placeholder="Password"
+                min="8"
+                type="password"
+                name="password"
+                value="<%= locals.body?.password %>"
+                id="password"
+              />
+              <p class="link">
+                Password must be at least 8 characters and contain uppercase,
+                lowercase, and a number
+              </p>
+            </label>
+            <button class="sbutton" type="submit">CREATE ACCOUNT</button>
+            <a href="/user/login" class="link"
+              >Already have an account? Login</a
+            >
+          </form>
+        </div>
       </div>
+      <%= locals.error %>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>

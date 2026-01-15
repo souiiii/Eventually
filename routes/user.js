@@ -32,18 +32,22 @@ router.post("/signup", async (req, res) => {
   try {
     const body = req.body;
     if (!body.email || !body.password || !body.fullName) {
-      return res
-        .status(400)
-        .render("user/signup", { error: "enter credentials", user: req.user });
+      return res.status(400).render("user/signup", {
+        body: req.body,
+        error: "enter credentials",
+        user: req.user,
+      });
     }
     if (
       typeof body.email !== "string" ||
       typeof body.fullName !== "string" ||
       typeof body.password !== "string"
     ) {
-      return res
-        .status(400)
-        .render("user/signup", { error: "invalid types sent", user: req.user });
+      return res.status(400).render("user/signup", {
+        body: req.body,
+        error: "invalid types sent",
+        user: req.user,
+      });
     }
 
     const email = body.email.trim().toLowerCase();
@@ -52,13 +56,23 @@ router.post("/signup", async (req, res) => {
 
     if (!validator.isEmail(email)) {
       return res.status(400).render("user/signup", {
+        body: req.body,
         error: "invalid email format",
         user: req.user,
       });
     }
 
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    if (!regex.test(password))
+      return res.status(400).render("user/signup", {
+        body: req.body,
+        error: "Use 8+ characters with uppercase, lowercase, and a number.",
+      });
+
     if (password.length < 8) {
       return res.status(400).render("user/signup", {
+        body: req.body,
         error: "password must be at least 8 characters",
         user: req.user,
       });
@@ -76,11 +90,14 @@ router.post("/signup", async (req, res) => {
     return res.status(200).redirect("/user/login");
   } catch (err) {
     if (err?.code === 11000)
-      return res
-        .status(409)
-        .render("user/signup", { error: "User already exits", user: req.user });
+      return res.status(409).render("user/signup", {
+        body: req.body,
+        error: "User already exits",
+        user: req.user,
+      });
     console.error("signup error:", err);
     return res.status(500).render("user/signup", {
+      body: req.body,
       error: "Error while signing up",
       user: req.user,
     });
@@ -95,23 +112,25 @@ router.post("/login", async (req, res) => {
     if (!body.email || !body.password)
       return res
         .status(400)
-        .render("user/login", { error: "enter credentials" });
+        .render("user/login", { body: req.body, error: "enter credentials" });
 
     if (typeof body.email !== "string" || typeof body.password !== "string")
       return res
         .status(400)
-        .render("user/login", { error: "invalid types sent" });
+        .render("user/login", { body: req.body, error: "invalid types sent" });
 
     const email = body.email.trim().toLowerCase();
     const password = body.password.trim();
 
     if (!validator.isEmail(email))
-      return res
-        .status(400)
-        .render("user/login", { error: "invalid email format" });
+      return res.status(400).render("user/login", {
+        body: req.body,
+        error: "invalid email format",
+      });
 
     if (password.length < 8)
       return res.status(400).render("user/login", {
+        body: req.body,
         error: "password must be at least 8 characters",
       });
 
@@ -120,10 +139,12 @@ router.post("/login", async (req, res) => {
     if (!user)
       return res
         .status(404)
-        .render("user/login", { error: "Account not found" });
+        .render("user/login", { body: req.body, error: "Account not found" });
 
     if (!(await compare(password, user.password)))
-      return res.status(401).render("user/login", { error: "Wrong Password" });
+      return res
+        .status(401)
+        .render("user/login", { body: req.body, error: "Wrong Password" });
 
     const payload = { _id: user._id, fullName: user.fullName, role: user.role };
 
@@ -136,7 +157,9 @@ router.post("/login", async (req, res) => {
     return res.status(200).redirect("/events/discover");
   } catch (err) {
     console.log("Error:", err);
-    return res.status(500).render("user/login", { error: "login failed" });
+    return res
+      .status(500)
+      .render("user/login", { body: req.body, error: "login failed" });
   }
 });
 

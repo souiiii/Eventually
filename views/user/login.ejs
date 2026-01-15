@@ -6,19 +6,36 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Login Page</h1>
-      <div>
-        <form action="/user/login" method="post">
-          <label>
-            <h2>Enter Email</h2>
-            <input required type="email" name="email" id="email" />
-          </label>
-          <label>
-            <h2>Enter Password</h2>
-            <input required type="password" name="password" id="password" />
-          </label>
-          <button type="submit">Login</button>
-        </form>
+      <div class="box">
+        <h1 class="headingg">Sign <span>In</span></h1>
+        <div>
+          <form class="form" action="/user/login" method="post">
+            <label>
+              <input
+                class="input"
+                required
+                type="email"
+                placeholder="Email Address"
+                value="<%= locals.body?.email %>"
+                name="email"
+                id="email"
+              />
+            </label>
+            <label>
+              <input
+                class="input"
+                required
+                type="password"
+                value="<%= locals.body?.password %>"
+                placeholder="Password"
+                name="password"
+                id="password"
+              />
+            </label>
+            <button class="sbutton" type="submit">CONTINUE WITH EMAIL</button>
+            <a href="/user/signup" class="link">Need an account? Join</a>
+          </form>
+        </div>
       </div>
     </div>
     <%- include('../partials/footer.ejs') %>
