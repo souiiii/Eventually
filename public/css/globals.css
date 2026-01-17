@@ -10,6 +10,7 @@
   --accent-color: #5361bd;
   --shadow-color: rgba(83, 97, 189, 0.15);
   --red-color: #ce5a5c;
+  --green-color: rgb(40, 129, 18);
 
   --prim-font: Poppins;
 }
@@ -390,7 +391,7 @@ body {
   font-size: 0.8rem;
   padding: 0.3rem 1rem;
   border-radius: 1rem 0rem 1rem 0rem;
-  background-color: rgb(40, 129, 18);
+  background-color: var(--green-color);
   color: var(--prim-color);
 }
 
@@ -555,7 +556,7 @@ body {
   z-index: 999;
   left: 0;
   width: 100%;
-  background-color: green;
+  background-color: var(--green-color);
   text-transform: uppercase;
 }
 
@@ -892,6 +893,7 @@ button:hover {
   .event-short-description {
     font-size: 0.7rem;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 }
 
