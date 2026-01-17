@@ -8,6 +8,10 @@
       <%- include('../partials/navbar.ejs') %>
       <div class="event-det-container">
         <h1 class="event-det-heading">
+          <% if(locals.now >= new Date(locals.eventDetails.startTime) &&
+          locals.now <= new Date(locals.eventDetails.endTime)) { %>
+          <div class="event-det-live">🔴Live</div>
+          <% } %>
           <span><%= locals.eventDetails.title %></span>
         </h1>
         <p class="event-det-deadline">
@@ -19,25 +23,21 @@
         <div class="event-det-body">
           <p class="event-det-dates">
             <span class="event-det-start-date"
-              ><img
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1MzYxQkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jYWxlbmRhci1kYXlzLWljb24gbHVjaWRlLWNhbGVuZGFyLWRheXMiPjxwYXRoIGQ9Ik04IDJ2NCIvPjxwYXRoIGQ9Ik0xNiAydjQiLz48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjQiIHJ4PSIyIi8+PHBhdGggZD0iTTMgMTBoMTgiLz48cGF0aCBkPSJNOCAxNGguMDEiLz48cGF0aCBkPSJNMTIgMTRoLjAxIi8+PHBhdGggZD0iTTE2IDE0aC4wMSIvPjxwYXRoIGQ9Ik04IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xMiAxOGguMDEiLz48cGF0aCBkPSJNMTYgMThoLjAxIi8+PC9zdmc+"
-                alt=""
-              /><span>&nbsp;4:00 PM, 12 Jun 2025</span></span
+              >🗓️<span>&nbsp;4:00 PM, 12 Jun 2025</span></span
             >
             <span>-></span>
             <span class="event-det-end-date"
-              ><img
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1MzYxQkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jYWxlbmRhci1kYXlzLWljb24gbHVjaWRlLWNhbGVuZGFyLWRheXMiPjxwYXRoIGQ9Ik04IDJ2NCIvPjxwYXRoIGQ9Ik0xNiAydjQiLz48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjQiIHJ4PSIyIi8+PHBhdGggZD0iTTMgMTBoMTgiLz48cGF0aCBkPSJNOCAxNGguMDEiLz48cGF0aCBkPSJNMTIgMTRoLjAxIi8+PHBhdGggZD0iTTE2IDE0aC4wMSIvPjxwYXRoIGQ9Ik04IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xMiAxOGguMDEiLz48cGF0aCBkPSJNMTYgMThoLjAxIi8+PC9zdmc+"
-                alt=""
-              /><span>&nbsp;6:00 PM, 13 Jun 2025</span></span
+              >🗓️<span>&nbsp;6:00 PM, 13 Jun 2025</span></span
             >
           </p>
           <p class="event-det-venue-details">
-            <span
+            <span class="sub-det"
               >Orgainiser:
               <span><%= locals.eventDetails.organiser %></span></span
             >
-            <span>Venue: <span><%= locals.eventDetails.venue %></span></span>
+            <span class="sub-det"
+              >📍Venue: <span><%= locals.eventDetails.venue %></span></span
+            >
           </p>
           <div class="event-det-short-description">
             <div>Dear Students,</div>

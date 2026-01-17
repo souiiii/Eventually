@@ -544,6 +544,19 @@ body {
   line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  position: relative;
+  z-index: 999;
+}
+
+.event-det-live {
+  font-size: 1rem;
+  position: absolute;
+  top: 0px;
+  z-index: 999;
+  left: 0;
+  width: 100%;
+  background-color: green;
+  text-transform: uppercase;
 }
 
 .event-det-deadline {
@@ -599,6 +612,13 @@ body {
   width: 100%;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.sub-det {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 210px;
 }
 
 .event-det-venue-details span span {
