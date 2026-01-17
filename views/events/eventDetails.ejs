@@ -39,6 +39,7 @@
               >📍Venue: <span><%= locals.eventDetails.venue %></span></span
             >
           </p>
+
           <div class="event-det-short-description">
             <div>Dear Students,</div>
             <%= locals.eventDetails.shortDescription %>
@@ -57,7 +58,17 @@
               <div class="event-det-author-position">Chair, HRDC</div>
             </div>
           </div>
-          <% if(locals.role==='ADMIN' ) { %>
+
+          <% if(locals.role==='STUDENT' &&
+          locals.registrationDetails?.status==='REGISTERED') { %>
+          <div class="event-registration-code-div">
+            <div class="event-registration-code-title">REGISTRATION CODE</div>
+            <% const result =
+            locals.registrationDetails?.registrationCode.match(/.{1,3}/g).join('-');
+            %>
+            <div class="event-registration-code"><%= result %></div>
+          </div>
+          <% } %> <% if(locals.role==='ADMIN' ) { %>
           <div class="event-det-button-div">
             <% if( locals.now >= new Date(locals.eventDetails.startTime) &&
             locals.now <= new Date(locals.eventDetails.endTime)) { %>

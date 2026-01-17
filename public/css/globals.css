@@ -391,7 +391,7 @@ body {
   font-size: 0.8rem;
   padding: 0.3rem 1rem;
   border-radius: 1rem 0rem 1rem 0rem;
-  background-color: var(--green-color);
+  background-color: var(--green-color) !important;
   color: var(--prim-color);
 }
 
@@ -682,6 +682,44 @@ body {
 
 .event-det-author-position {
   color: rgba(23, 23, 23, 0.67);
+}
+
+.event-registration-code-div {
+  display: flex;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-inline: auto;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 4px var(--shadow-color);
+}
+
+.event-registration-code-title {
+  background-color: var(--accent-color);
+  color: var(--prim-color);
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.event-registration-code {
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 6.5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .event-det-button-div {
