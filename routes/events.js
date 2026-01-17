@@ -84,6 +84,8 @@ router.get(
   checkAuthorization(["ADMIN", "STUDENT"]),
   async (req, res) => {
     const id = req.params.id;
+    const now = new Date();
+
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(400).send("Invalid id");
 
@@ -99,6 +101,7 @@ router.get(
       registrationDetails,
       role: req.user.role,
       user: req.user,
+      now,
     });
   }
 );

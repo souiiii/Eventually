@@ -6,7 +6,94 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Event Details</h1>
+      <div class="event-det-container">
+        <h1 class="event-det-heading">
+          <span><%= locals.eventDetails.title %></span>
+        </h1>
+        <p class="event-det-deadline">
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZGZkZmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1hbGFybS1jbG9jay1pY29uIGx1Y2lkZS1hbGFybS1jbG9jayI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMyIgcj0iOCIvPjxwYXRoIGQ9Ik0xMiA5djRsMiAyIi8+PHBhdGggZD0iTTUgMyAyIDYiLz48cGF0aCBkPSJtMjIgNi0zLTMiLz48cGF0aCBkPSJNNi4zOCAxOC43IDQgMjEiLz48cGF0aCBkPSJNMTcuNjQgMTguNjcgMjAgMjEiLz48L3N2Zz4="
+          />
+          <span>deadline : 2:00 pm, 12 jun 2025</span>
+        </p>
+        <div class="event-det-body">
+          <p class="event-det-dates">
+            <span class="event-det-start-date"
+              ><img
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1MzYxQkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jYWxlbmRhci1kYXlzLWljb24gbHVjaWRlLWNhbGVuZGFyLWRheXMiPjxwYXRoIGQ9Ik04IDJ2NCIvPjxwYXRoIGQ9Ik0xNiAydjQiLz48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjQiIHJ4PSIyIi8+PHBhdGggZD0iTTMgMTBoMTgiLz48cGF0aCBkPSJNOCAxNGguMDEiLz48cGF0aCBkPSJNMTIgMTRoLjAxIi8+PHBhdGggZD0iTTE2IDE0aC4wMSIvPjxwYXRoIGQ9Ik04IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xMiAxOGguMDEiLz48cGF0aCBkPSJNMTYgMThoLjAxIi8+PC9zdmc+"
+                alt=""
+              /><span>&nbsp;4:00 PM, 12 Jun 2025</span></span
+            >
+            <span>-></span>
+            <span class="event-det-end-date"
+              ><img
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1MzYxQkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jYWxlbmRhci1kYXlzLWljb24gbHVjaWRlLWNhbGVuZGFyLWRheXMiPjxwYXRoIGQ9Ik04IDJ2NCIvPjxwYXRoIGQ9Ik0xNiAydjQiLz48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjQiIHJ4PSIyIi8+PHBhdGggZD0iTTMgMTBoMTgiLz48cGF0aCBkPSJNOCAxNGguMDEiLz48cGF0aCBkPSJNMTIgMTRoLjAxIi8+PHBhdGggZD0iTTE2IDE0aC4wMSIvPjxwYXRoIGQ9Ik04IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xMiAxOGguMDEiLz48cGF0aCBkPSJNMTYgMThoLjAxIi8+PC9zdmc+"
+                alt=""
+              /><span>&nbsp;6:00 PM, 13 Jun 2025</span></span
+            >
+          </p>
+          <p class="event-det-venue-details">
+            <span
+              >Orgainiser:
+              <span><%= locals.eventDetails.organiser %></span></span
+            >
+            <span>Venue: <span><%= locals.eventDetails.venue %></span></span>
+          </p>
+          <div class="event-det-short-description">
+            <div>Dear Students,</div>
+            <%= locals.eventDetails.shortDescription %>
+          </div>
+          <% if(locals.eventDetails.description) { %>
+          <div class="event-det-session-overview">
+            <div>Session Overview</div>
+            <%= locals.eventDetails.description %>
+          </div>
+          <% } %>
+          <div class="line"></div>
+          <div class="event-det-author-details">
+            <div>Warm Regards,</div>
+            <div class="event-det-author">
+              <div class="event-det-author-name">Dr Lipika Das</div>
+              <div class="event-det-author-position">Chair, HRDC</div>
+            </div>
+          </div>
+          <% if(locals.role==='ADMIN' ) { %>
+          <div class="event-det-button-div">
+            <% if( locals.now >= new Date(locals.eventDetails.startTime) &&
+            locals.now <= new Date(locals.eventDetails.endTime)) { %>
+            <a
+              href="/admin/student-registrations/<%= locals.eventDetails._id %>"
+              >MARK ATTENDANCE</a
+            >
+            <% } else { %>
+            <a
+              href="/admin/student-registrations/<%= locals.eventDetails._id %>"
+              >VIEW ATTENDANCE</a
+            >
+            <% } %>
+          </div>
+          <% } else { %> <% if( locals.now <= new
+          Date(locals.eventDetails.deadline)) { %> <%
+          if(!locals.registrationDetails || locals.registrationDetails.status
+          === 'CANCELLED') { %>
+          <form
+            action="/events/register/<%= locals.eventDetails._id %>"
+            method="post"
+            class="event-det-button-div"
+          >
+            <button type="submit">REGISTER</button>
+          </form>
+          <% } else { %>
+          <form
+            action="/events/de-register/<%= locals.eventDetails._id %>"
+            method="post"
+            class="event-det-cancel-button-div"
+          >
+            <button type="submit">CANCEL REGISTRATION</button>
+          </form>
+          <% } %> <% } %><% } %>
+        </div>
+      </div>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>
