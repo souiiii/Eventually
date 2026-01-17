@@ -89,10 +89,19 @@ router.get(
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(400).send("Invalid id");
 
-    const [eventDetails, registrationDetails] = await Promise.all([
+    const [eventDetails, registAll] = await Promise.all([
       Event.findById(id).lean(),
-      Registration.findOne({ userId: req.user._id, eventId: id }).lean(),
+      Registration.find({ eventId: id }).lean(),
     ]);
+
+    const registrationDetails = registAll.find(
+      (r) => r.userId.toString() === req.user._id
+    );
+
+    const currOcc = registAll.reduce(
+      (acc, r) => (r.status === "REGISTERED" ? (acc = acc + 1) : acc),
+      0
+    );
 
     if (!eventDetails) return res.status(404).send("No such event exists");
 
@@ -101,6 +110,7 @@ router.get(
       registrationDetails,
       role: req.user.role,
       user: req.user,
+      currOcc,
       now,
     });
   }
@@ -120,29 +130,44 @@ router.post(
 
       const now = new Date();
 
+      // Get event details first
+      const event = await Event.findById(eventId).lean();
+      if (!event) return res.status(404).send("No such event exists");
+
+      // Check deadline
+      if (event.deadline < now) {
+        return res.status(400).send("Registration is closed");
+      }
+
+      // Check existing registration
       const regist = await Registration.findOne({
         eventId,
         userId,
-      })
-        .populate({ path: "eventId", select: "_id deadline" })
-        .lean();
+      }).lean();
 
       if (regist) {
-        if (!regist.eventId)
-          return res.status(404).send("No such event exists");
-        const deadline = regist.eventId.deadline;
-        if (deadline < now)
-          return res.status(400).send("Registration is closed");
-        if (regist.status === "REGISTERED")
+        if (regist.status === "REGISTERED") {
           return res.status(400).send("Already registered");
-        await registerAgain(eventId, userId, deadline);
-        return res.redirect(`/events/${eventId}`);
+        }
+        // User previously cancelled, allow re-registration
       }
 
-      const event = await Event.findById(eventId).lean();
-      if (!event) return res.status(404).send("No such event exists");
-      const deadline = event.deadline;
-      await registerNew(eventId, userId, deadline);
+      // Check capacity
+      const totalRegistered = await Registration.countDocuments({
+        eventId,
+        status: "REGISTERED",
+      });
+
+      if (totalRegistered >= event.capacity) {
+        return res.status(400).send("Capacity is full");
+      }
+
+      // Register
+      if (regist && regist.status === "CANCELLED") {
+        await registerAgain(eventId, userId, event.deadline);
+      } else {
+        await registerNew(eventId, userId, event.deadline);
+      }
 
       return res.redirect(`/events/${eventId}`);
     } catch (err) {
@@ -177,7 +202,7 @@ router.post(
           userId,
           status: "REGISTERED",
         },
-        { $set: { status: "CANCELLED", registrationCode: null } },
+        { $set: { status: "CANCELLED" } },
         { runValidators: true }
       ).lean();
 

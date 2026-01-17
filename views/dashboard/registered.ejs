@@ -9,14 +9,14 @@
 
       <div class="heading-div">
         <% const
-          attendedEventsIds = locals.registeredEvents .filter(m => m.attendanceStatus
-          === 'ATTENDED') .map(m => m.eventId.toString()); const
-          pendingEventsIds = locals.registeredEvents .filter(m => m.status ===
-          'PENDING' && (locals.now >= new Date(m.startTime) && locals.now <= new Date(m.endTime))) .map(m => m.eventId.toString());
+          attendedEventsIds = locals.registeredEvents.filter(m => m.attendanceStatus
+          === 'ATTENDED') .map(m => m.eventId._id.toString()); const
+          pendingEventsIds = locals.registeredEvents.filter(m => m.attendanceStatus ===
+          'PENDING' && locals.now >= new Date(m.eventId.startTime) && locals.now <= new Date(m.eventId.endTime)).map(m => m.eventId._id.toString());
           const
-          notAttendedEventsIds = locals.registeredEvents .filter(m => m.status ===
-          'PENDING' && (locals.now >= new Date(m.endTime))) .map(m => m.eventId.toString());
-          
+          notAttendedEventsIds = locals.registeredEvents.filter(m => m.attendanceStatus ===
+          'PENDING' && (locals.now >= new Date(m.eventId.endTime))).map(m => m.eventId._id.toString());
+          console.log(notAttendedEventsIds);
           const
         pad2 = n => String(n).padStart(2, '0'); const to12Hour = d => { const
         h24 = d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM'; const h12 = (h24
@@ -42,12 +42,12 @@
 
       <div  class="event-list-div">
         <% locals.registeredEvents.forEach(event => { %> <% const startDate = new
-        Date(event.startTime); const endDate = new Date(event.endTime);  const startTimeText =
+        Date(event.eventId.startTime); const endDate = new Date(event.eventId.endTime);  const startTimeText =
         to12Hour(startDate); const endTimeText = to12Hour(endDate); const
         startDateText = `${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
 
-        <a href="/events/<%= event._id %>" class="event-div">
+        <a href="/events/<%= event.eventId._id %>" class="event-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
@@ -58,13 +58,13 @@
           </div>
 
           <div class="event-desc-div">
-            <div class="event-title"><%= event.title %></div>
+            <div class="event-title"><%= event.eventId.title %></div>
             <div class="event-short-description">
-              <%= event.shortDescription %>
+              <%= event.eventId.shortDescription %>
             </div>
           </div>
 
-          <% if (event.startTime <= locals.now && event.endTime >= locals.now) {
+          <% if (event.eventId.startTime <= locals.now && event.eventId.endTime >= locals.now) {
           %> 
 
           <div class="live-meter">
@@ -75,11 +75,11 @@
           </div>
 
           <% } %>  <% if
-          (attendedEventsIds.includes(event._id.toString())) { %>
+          (attendedEventsIds.includes(event.eventId._id.toString())) { %>
           <div class="statusOk">ATTENDED</div>
-          <% } %> <% if (pendingEventsIds.includes(event._id.toString())) { %>
+          <% } %> <% if (pendingEventsIds.includes(event.eventId._id.toString())) { %>
           <div class="statusNotOk">ATTENDANCE PENDING</div>
-          <% } %>  <% if (notAttendedEventsIds.includes(event._id.toString())) { %>
+          <% } %>  <% if (notAttendedEventsIds.includes(event.eventId._id.toString())) { %>
           <div class="statusNotOk">DID NOT ATTEND</div>
           <% } %>
         </a>

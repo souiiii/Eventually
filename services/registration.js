@@ -47,16 +47,13 @@ export async function registerNew(eventId, userId, deadline) {
       }
 
       const code = generateCode(9);
-      await Registration.create(
-        {
-          eventId,
-          userId,
-          status: "REGISTERED",
-          attendanceStatus: "PENDING",
-          registrationCode: code,
-        },
-        { runValidators: true }
-      );
+      await Registration.create({
+        eventId,
+        userId,
+        status: "REGISTERED",
+        attendanceStatus: "PENDING",
+        registrationCode: code,
+      });
 
       return;
     } catch (err) {

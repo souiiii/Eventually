@@ -72,10 +72,14 @@
             >
             <% } %>
           </div>
-          <% } else { %> <% if( locals.now <= new
+          <% if(locals.eventDetails.deadline <= locals.now) { %>
+          <div class="event-det-status">REGISTRATION CLOSED</div>
+          <% } %> <% } else { %> <% if( locals.now <= new
           Date(locals.eventDetails.deadline)) { %> <%
           if(!locals.registrationDetails || locals.registrationDetails.status
-          === 'CANCELLED') { %>
+          === 'CANCELLED') { %> <% if(locals.eventDetails.capacity >
+          locals.currOcc) { %>
+
           <form
             action="/events/register/<%= locals.eventDetails._id %>"
             method="post"
@@ -84,6 +88,10 @@
             <button type="submit">REGISTER</button>
           </form>
           <% } else { %>
+
+          <div class="event-det-status">HOUSE FULL</div>
+
+          <% } %> <% } else { %>
           <form
             action="/events/de-register/<%= locals.eventDetails._id %>"
             method="post"
@@ -91,6 +99,24 @@
           >
             <button type="submit">CANCEL REGISTRATION</button>
           </form>
+
+          <% } %> <% } else if(locals.eventDetails.startTime >= locals.now) { %>
+          <div class="event-det-status">REGISTRATION CLOSED</div>
+          <% } else if(locals.eventDetails.endTime >= locals.now) { %> <%
+          if(!registrationDetails || registrationDetails.status==='CANCELLED') {
+          %>
+          <div class="event-det-status">REGISTRATION CLOSED</div>
+          <% } else if(registrationDetails.attendanceStatus ==='PENDING') { %>
+          <div class="event-det-status statusNotOk">ATTENDANCE PENDING</div>
+          <% } else { %>
+          <div class="event-det-status statusOk">ATTENDED</div>
+          <% } %> <% } else { %> <% if(!registrationDetails ||
+          registrationDetails.status==='CANCELLED') { %>
+          <div class="event-det-status">REGISTRATION CLOSED</div>
+          <% } else if(registrationDetails.attendanceStatus ==='PENDING') { %>
+          <div class="event-det-status statusNotOk">DID NOT ATTEND</div>
+          <% } else { %>
+          <div class="event-det-status statusOk">ATTENDED</div>
           <% } %> <% } %><% } %>
         </div>
       </div>

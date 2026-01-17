@@ -14,7 +14,6 @@ const registrationSchema = new mongoose.Schema(
     },
     registrationCode: {
       type: String,
-      required: true,
       unique: true,
     },
     status: {
@@ -39,6 +38,6 @@ registrationSchema.index({ userId: 1, status: 1 });
 registrationSchema.index({ eventId: 1, attendanceStatus: 1 });
 registrationSchema.index({ registrationCode: 1, eventId: 1 }, { unique: true });
 
-const registrationModel = mongoose.model("registration", registrationSchema);
+const registrationModel = mongoose.model("registrations", registrationSchema);
 
 export default registrationModel;
