@@ -19,6 +19,8 @@
           </label>
         </form>
       </div>
+
+      <% if(locals.events.length) { %>
       <div class="event-list-div">
         <% locals.events.forEach(event=> { %> <% const startDate=new
         Date(event.startTime); const endDate=new Date(event.endTime); pad2=(n)=>
@@ -49,6 +51,9 @@
         </a>
         <% }) %>
       </div>
+        <% } else { %>
+          <div class="message">🤔 No event history!</div>
+    <% } %>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>

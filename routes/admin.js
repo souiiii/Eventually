@@ -299,6 +299,8 @@ router.delete("/delete-event/:id", async (req, res) => {
 router.get("/student-registrations/:id", async (req, res) => {
   try {
     const id = req.params.id;
+    const now = new Date();
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).send("bad request");
     }
@@ -306,11 +308,14 @@ router.get("/student-registrations/:id", async (req, res) => {
     const eventRegistrations = await Registration.find({
       eventId: id,
       status: "REGISTERED",
-    }).populate("userId", "fullName email");
+    })
+      .populate("userId", "fullName email")
+      .populate("eventId", "_id startTime endTime");
 
     return res.status(200).render("admin/eventRegistrations", {
       eventRegistrations,
       user: req.user,
+      now,
     });
   } catch (err) {
     console.log("Error: ", err.message);

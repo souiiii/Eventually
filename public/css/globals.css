@@ -55,6 +55,7 @@ body {
 .main {
   width: 100%;
   max-width: 800px;
+  min-height: 100vh;
   /* height: 2000px; */
   /* border: 1px solid red; */
   display: flex;
@@ -526,6 +527,7 @@ body {
   background-color: var(--prim-color);
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 4px var(--shadow-color);
+  border: 1px solid var(--shadow-color);
 }
 
 .event-det-heading {
@@ -788,7 +790,165 @@ body {
   border-radius: 0;
 }
 
+/* ATTENDANCE MANAGEMENT */
+
+.attendance-status-div {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendance-registered-div,
+.attendance-attended-div {
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background-color: var(--prim-color);
+  box-shadow: 0 6px 6px var(--shadow-color);
+  border-radius: 1rem;
+  border: 1px solid var(--shadow-color);
+}
+
+.attendance-registered-heading,
+.attendance-attended-heading {
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+  color: #171717a4;
+}
+
+.attendance-attended,
+.attendance-registered {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 3rem;
+  color: var(--accent-color);
+}
+
+.attendance-attended {
+  color: var(--green-color);
+}
+
+.attendance-registered-students-list-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--prim-color);
+  box-shadow: 0 6px 6px var(--shadow-color);
+  border-radius: 1rem;
+  border: 1px solid var(--shadow-color);
+  overflow: hidden;
+  margin-block: 1rem;
+}
+
+.attendance-registered-students-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.4fr;
+  width: 100%;
+  background-color: var(--accent-color);
+  color: var(--prim-color);
+  padding: 1rem 2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.attendance-registered-students-tile {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.4fr;
+  width: 100%;
+  background-color: var(--prim-color);
+  color: var(--secondary-color);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--shadow-color);
+}
+
+.attendance-registered-students-header div,
+.attendance-registered-students-tile div {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+.attendance-tile-name-email-div {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.attendance-tile-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: capitalize;
+  color: var(--accent-color);
+}
+
+.attendance-tile-email {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1717179d;
+  letter-spacing: 0.35px;
+}
+
+.attendance-tile-code {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 2px;
+  padding: 0.25rem 1rem;
+  width: fit-content !important;
+  background-color: #edeff7;
+  border-radius: 1rem;
+  border: 1px solid var(--shadow-color);
+}
+
+.negative,
+.positive,
+.neutral {
+  border-radius: 1rem;
+  border: 1px solid var(--shadow-color);
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content !important;
+  font-size: 0.9rem;
+}
 /* Misc */
+
+.negative {
+  color: var(--red-color);
+  background-color: orange;
+}
+
+.positive {
+  color: var(--green-color);
+  background-color: rgb(201, 243, 201);
+}
+
+.neutral {
+  color: var(--prim-color);
+  background-color: #a5a8aa;
+}
+
+.message {
+  margin-inline: auto;
+  margin-block: auto;
+  height: 100%;
+  color: var(--secondary-color);
+  font-weight: 400;
+}
 
 a {
   text-decoration: none;

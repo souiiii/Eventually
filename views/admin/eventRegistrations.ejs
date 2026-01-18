@@ -5,8 +5,77 @@
   </head>
   <body>
     <div class="main">
-      <%- include('../partials/navbar.ejs') %>
-      <h1>Students Registered</h1>
+      <%- include('../partials/navbar.ejs') %> <% const isLive =
+      (locals.eventRegistrations.length && locals.now <
+      locals.eventRegistrations[0].eventId.endTime && locals.now >=
+      locals.eventRegistrations[0].eventId.startTime); const isPost
+      =(locals.eventRegistrations.length &&
+      locals.now>=locals.eventRegistrations[0].eventId.endTime); const
+      isPre=(locals.eventRegistrations.length &&
+      locals.now<=locals.eventRegistrations[0].eventId.startTime); const
+      attended =locals.eventRegistrations.reduce((acc,
+      r)=>(r.attendanceStatus==='ATTENDED')?acc+1:acc,0) %>
+
+      <div class="heading-div">
+        <h1 class="heading">Attendance Management</h1>
+      </div>
+
+      <div class="attendance-status-div">
+        <div class="attendance-registered-div">
+          <div class="attendance-registered-heading">TOTAL REGISTERED</div>
+          <div class="attendance-registered">
+            <%=locals.eventRegistrations.length%>
+          </div>
+        </div>
+        <div class="attendance-attended-div">
+          <div class="attendance-attended-heading">TOTAL ATTENDED</div>
+          <div class="attendance-attended"><%=attended%></div>
+        </div>
+      </div>
+      <% if(locals.eventRegistrations.length) { %>
+      <div class="attendance-registered-students-list-div">
+        <div class="attendance-registered-students-header">
+          <div class="attendance-header-name">STUDENT</div>
+          <div class="attendance-header-code">REGISTRATION CODE</div>
+          <div class="attendance-header-status">STATUS</div>
+        </div>
+
+        <% locals.eventRegistrations.forEach(registration=>{ %>
+        <div class="attendance-registered-students-tile">
+          <div class="attendance-tile-name-email-div">
+            <div class="attendance-tile-name">
+              <%= registration.userId.fullName %>
+            </div>
+            <div class="attendance-tile-email">
+              <%= registration.userId.email %>
+            </div>
+          </div>
+          <div class="attendance-tile-code">
+            <%= registration.registrationCode.match(/.{1,3}/g).join('-'); %>
+          </div>
+          <div class="attendance-tile-status">
+            <% if (isPre) { %>
+            <div class="neutral">STANDBY</div>
+
+            <% } else if (isPost) { %> <% if (registration.attendanceStatus ===
+            'PENDING') { %>
+            <div class="negative">NOT ATTENDED</div>
+            <% } else { %>
+            <div class="positive">ATTENDED</div>
+            <% } %> <% } else { %> <% if (registration.attendanceStatus ===
+            'PENDING') { %>
+            <div class="negative">PENDING</div>
+            <% } else { %>
+            <div class="positive">ATTENDED</div>
+            <% } %> <% } %>
+          </div>
+        </div>
+
+        <% }) %> <% } else {%>
+
+        <div class="message">🥲 No registrations yet!</div>
+        <% } %>
+      </div>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>

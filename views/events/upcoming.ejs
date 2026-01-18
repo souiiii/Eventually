@@ -35,7 +35,10 @@
         </form>
       </div>
 
-      <div class="event-list-div">
+
+    
+<% if(locals.events.length) { %>
+    <div class="event-list-div">
         <% locals.events.forEach(event => { %> <% const startDate = new
         Date(event.startTime); const endDate = new Date(event.endTime);  const startTimeText =
         to12Hour(startDate); const endTimeText = to12Hour(endDate); const
@@ -83,6 +86,10 @@
 
         <% }) %>
       </div>
+  <% } else { %>
+    <div class="message">🥲 No upcoming events!</div>
+    <% } %>
+
     </div>
 
     <%- include('../partials/footer.ejs') %>

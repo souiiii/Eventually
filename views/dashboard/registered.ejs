@@ -40,6 +40,7 @@
         <a href="/dashboard/cancelled" class="sub-nav-button <%= locals.uri ==='CANCELLED'?'cancelled':'' %>">Cancelled</a>
       </div>
 
+      <% if(locals.registeredEvents.length) { %>
       <div  class="event-list-div">
         <% locals.registeredEvents.forEach(event => { %> <% const startDate = new
         Date(event.eventId.startTime); const endDate = new Date(event.eventId.endTime);  const startTimeText =
@@ -86,6 +87,10 @@
 
         <% }) %>
       </div>
+
+       <% } else { %>
+          <div class="message">😇 Registered events will appear here!</div>
+    <% } %>
     </div>
 
     <%- include('../partials/footer.ejs') %>

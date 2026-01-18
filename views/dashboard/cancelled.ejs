@@ -27,7 +27,7 @@
         <a href="/dashboard/cancelled" class="sub-nav-button <%= locals.uri ==='CANCELLED'?'cancelled':'' %>">Cancelled</a>
       </div>
 
-      
+            <% if(locals.cancelledEvents.length) { %>
       <div class="event-list-div">
         <% locals.cancelledEvents.forEach(event=> { %> <% const startDate=new
         Date(event.eventId.startTime); const endDate=new Date(event.eventId.endTime); pad2=(n)=>
@@ -58,6 +58,10 @@
         </a>
         <% }) %>
       </div>
+
+       <% } else { %>
+          <div class="message">😊 You have no cancelled events yet!</div>
+    <% } %>
     </div>
     <%- include('../partials/footer.ejs') %>
   </body>
