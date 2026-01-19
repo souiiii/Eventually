@@ -531,16 +531,22 @@ body {
 }
 
 .event-det-heading {
-  padding: 2rem 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
   font-family: "JetBrains Mono", monospace;
   font-size: 1.75rem;
   font-weight: 600;
   color: var(--prim-color);
   background-color: var(--accent-color);
   width: 100%;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  position: relative;
+}
+
+.event-det-heading span {
+  padding: 2rem 1rem;
+
   display: -webkit-box;
   text-align: center;
   -webkit-line-clamp: 1;
@@ -549,16 +555,17 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position: relative;
-  /* z-index: 999; */
 }
 
 .event-det-live {
   font-size: 1rem;
-  position: absolute;
+  position: relative;
   top: 0px;
   z-index: 999;
   left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   background-color: var(--green-color);
   text-transform: uppercase;
@@ -612,6 +619,7 @@ body {
 .event-det-venue-details {
   padding: 1.5rem;
   background-color: #edeff7;
+  border-bottom: 1px solid var(--shadow-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -990,6 +998,8 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-all;
   color: #1717179d;
   letter-spacing: 0.35px;
   min-width: 0;
@@ -1042,6 +1052,10 @@ body {
   white-space: nowrap;
 }
 /* Misc */
+
+.prim {
+  background-color: var(--prim-color);
+}
 
 .negative {
   color: var(--red-color);
@@ -1111,6 +1125,13 @@ button:hover {
   height: auto !important;
   display: flex;
   justify-content: end;
+}
+.container-border {
+  border-radius: 1rem;
+}
+
+.headd {
+  padding: 1.5rem 1rem;
 }
 
 .fixed-right div {

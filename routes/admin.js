@@ -313,10 +313,23 @@ router.get("/student-registrations/:id", async (req, res) => {
       status: "REGISTERED",
     })
       .populate("userId", "fullName email")
-      .populate("eventId", "_id startTime endTime");
+      .populate("eventId")
+      .lean();
+
+    let eventDetails = null;
+
+    if (!eventRegistrations.length) {
+      eventDetails = await Event.findById(id);
+      if (!eventDetails) return res.status(400).send("Invalid Event Id");
+    } else {
+      eventDetails = eventRegistrations.find(
+        (r) => r.eventId._id.toString() === id
+      ).eventId;
+    }
 
     return res.status(200).render("admin/eventRegistrations", {
       eventRegistrations,
+      eventDetails,
       user: req.user,
       now,
       success,
@@ -348,7 +361,7 @@ router.post("/mark-attendance/:eventId", async (req, res) => {
     if (!code) return redirectWithError("Please enter a code", res, eventId);
 
     if (!(code.length === 11))
-      return res.status(400).send("Enter valid code", res, eventId);
+      return redirectWithError("Enter valid code", res, eventId);
 
     let unformattedCodeSprite = code.split("-");
     if (unformattedCodeSprite.length !== 3)
@@ -371,7 +384,7 @@ router.post("/mark-attendance/:eventId", async (req, res) => {
       },
       { $set: { attendanceStatus: "ATTENDED" } },
       { runValidators: true, new: true }
-    );
+    ).populate("userId", "_id fullName");
 
     if (!registration)
       return redirectWithError(
@@ -381,7 +394,10 @@ router.post("/mark-attendance/:eventId", async (req, res) => {
       );
 
     return redirectWithSuccess(
-      `Attendance marked for ${req.user.fullName}`,
+      `Attendance marked for ${
+        registration.userId.fullName.slice(0, 1).toUpperCase() +
+        registration.userId.fullName.slice(1)
+      }`,
       res,
       eventId
     );
