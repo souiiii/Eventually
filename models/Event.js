@@ -42,6 +42,16 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    author: {
+      type: String,
+      required: true,
+      default: "Dr Lipika Das",
+    },
+    position: {
+      type: String,
+      required: true,
+      default: "Chair, HRDC",
+    },
   },
   { timestamps: true }
 );

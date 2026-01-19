@@ -601,6 +601,7 @@ body {
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .event-det-start-date img,
@@ -792,6 +793,84 @@ body {
 
 /* ATTENDANCE MANAGEMENT */
 
+.attendance-scanner-div {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 100%;
+  padding: 1.5rem;
+  background-color: var(--prim-color);
+  border-radius: 1rem;
+  border: 1px solid var(--shadow-color);
+  box-shadow: 0 6px 6px var(--shadow-color);
+  margin-bottom: 1rem;
+}
+
+.attendance-scanner-heading {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.attendance-scanner-sub-heading {
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #171717c2;
+}
+
+.attendance-scanner-code-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.attendance-scanner-code {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-family: "JetBrains Mono", Courier, monospace;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #333;
+  transition: border-color 0.2s;
+}
+
+.attendance-scanner-code:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+.attendance-scanner-code::placeholder {
+  color: #aaa;
+  letter-spacing: 4px;
+}
+
+.attendance-scanner-code-button {
+  width: fit-content !important;
+  flex-shrink: 0;
+  background-color: var(--accent-color);
+  color: var(--prim-color);
+  padding: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500 !important;
+  letter-spacing: 0.75px;
+}
+
 .attendance-status-div {
   display: flex;
   width: 100%;
@@ -849,18 +928,20 @@ body {
 
 .attendance-registered-students-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.4fr;
+  grid-template-columns: 0.8fr 1fr 0.4fr;
   width: 100%;
   background-color: var(--accent-color);
   color: var(--prim-color);
   padding: 1rem 2rem;
   font-size: 0.9rem;
   font-weight: 500;
+  align-content: center;
+  justify-content: center;
 }
 
 .attendance-registered-students-tile {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.4fr;
+  grid-template-columns: 0.8fr 1fr 0.4fr;
   width: 100%;
   background-color: var(--prim-color);
   color: var(--secondary-color);
@@ -868,28 +949,37 @@ body {
   font-size: 1rem;
   font-weight: 500;
   border-bottom: 1px solid var(--shadow-color);
+  align-content: center;
+  justify-content: center;
 }
 
-.attendance-registered-students-header div,
-.attendance-registered-students-tile div {
+.attendance-registered-students-header > div,
+.attendance-registered-students-tile > div {
   display: flex;
   justify-content: start;
-  align-items: center;
+  align-items: start;
   width: 100%;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
 }
 
 .attendance-tile-name-email-div {
   display: flex;
   justify-content: center;
+  text-overflow: ellipsis;
   align-items: start;
+  overflow: hidden;
   flex-direction: column;
   gap: 0.1rem;
 }
 
 .attendance-tile-name {
   font-weight: 700;
+  width: 100%;
   font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-transform: capitalize;
   color: var(--accent-color);
 }
@@ -897,8 +987,12 @@ body {
 .attendance-tile-email {
   font-weight: 600;
   font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: #1717179d;
   letter-spacing: 0.35px;
+  min-width: 0;
 }
 
 .attendance-tile-code {
@@ -906,11 +1000,32 @@ body {
   font-weight: 700;
   font-family: "JetBrains Mono", monospace;
   letter-spacing: 2px;
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
   width: fit-content !important;
   background-color: #edeff7;
   border-radius: 1rem;
   border: 1px solid var(--shadow-color);
+  justify-self: start;
+  align-self: center;
+}
+
+.small {
+  display: none !important;
+}
+
+.attendance-tile-status {
+  letter-spacing: 1px;
+  width: fit-content !important;
+}
+
+.attendance-header-code {
+  justify-self: start;
+}
+
+.attendance-header-code,
+.attendance-header-status,
+.attendance-header-name {
+  width: fit-content !important;
 }
 
 .negative,
@@ -924,12 +1039,13 @@ body {
   align-items: center;
   width: fit-content !important;
   font-size: 0.9rem;
+  white-space: nowrap;
 }
 /* Misc */
 
 .negative {
   color: var(--red-color);
-  background-color: orange;
+  background-color: rgb(255, 226, 172);
 }
 
 .positive {
@@ -940,6 +1056,11 @@ body {
 .neutral {
   color: var(--prim-color);
   background-color: #a5a8aa;
+}
+
+.status-live {
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .message {
@@ -1122,6 +1243,57 @@ button:hover {
   .event-det-venue-details {
     font-size: 0.85rem;
   }
+
+  .negative,
+  .positive,
+  .neutral {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+  }
+
+  .attendance-registered-students-header,
+  .attendance-registered-students-tile {
+    padding-inline: 1rem;
+  }
+
+  .attendance-header-code {
+    justify-self: center;
+  }
+
+  .attendance-header-status {
+    justify-self: center;
+  }
+
+  .attendance-tile-status {
+    justify-self: center;
+  }
+
+  .attendance-tile-code {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 0.5rem;
+    justify-self: center;
+  }
+
+  .attendance-tile-name {
+    font-size: 0.8rem;
+  }
+  .attendance-tile-email {
+    font-size: 0.7rem;
+  }
+
+  .attendance-registered-students-header {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .attendance-registered-students-tile {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .small {
+    display: flex !important;
+  }
+  .big {
+    display: none !important;
+  }
 }
 
 @media (max-width: 440px) {
@@ -1133,5 +1305,79 @@ button:hover {
     min-height: 130px;
     gap: 0.75rem;
     padding-left: 0.5rem;
+  }
+
+  .event-det-heading {
+    font-size: 1.5rem;
+  }
+
+  .event-det-deadline {
+    font-size: 0.9rem;
+  }
+
+  .event-det-deadline img {
+    top: -1px;
+    position: relative;
+  }
+
+  .form {
+    width: 350px;
+  }
+
+  .headingg {
+    font-size: 2rem;
+  }
+
+  .input {
+    font-size: 14px;
+  }
+
+  .sbutton {
+    font-size: 0.8rem;
+  }
+
+  .box {
+    height: 75vh;
+  }
+
+  .attendance-attended-heading,
+  .attendance-registered-heading {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .attendance-attended-div,
+  .attendance-registered-div {
+    padding-inline: 0.5rem;
+  }
+  .attendance-attended-heading,
+  .attendance-registered-heading {
+    font-size: 0.8rem;
+  }
+
+  .attendance-attended,
+  .attendance-registered {
+    font-size: 2.5rem;
+  }
+  .attendance-tile-name {
+    font-size: 0.7rem;
+  }
+  .attendance-tile-email {
+    font-size: 0.6rem;
+  }
+
+  .attendance-tile-code {
+    font-size: 0.6rem;
+  }
+  .attendance-tile-status div {
+    font-size: 0.6rem;
+  }
+
+  .attendance-registered-students-header {
+    font-size: 0.7rem;
+  }
+  .form {
+    width: 300px;
   }
 }

@@ -4,6 +4,12 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
+    <% const formatDateTime = (iso) => { const d = new Date(iso); const time =
+    d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12:
+    true, timeZone: "UTC", }); const date = d.toLocaleDateString("en-GB", { day:
+    "2-digit", month: "short", year: "numeric", timeZone: "UTC",
+    });console.log(time); return `${time}, ${date}`; }; %>
+
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
       <div class="event-det-container">
@@ -18,16 +24,24 @@
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZGZkZmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1hbGFybS1jbG9jay1pY29uIGx1Y2lkZS1hbGFybS1jbG9jayI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMyIgcj0iOCIvPjxwYXRoIGQ9Ik0xMiA5djRsMiAyIi8+PHBhdGggZD0iTTUgMyAyIDYiLz48cGF0aCBkPSJtMjIgNi0zLTMiLz48cGF0aCBkPSJNNi4zOCAxOC43IDQgMjEiLz48cGF0aCBkPSJNMTcuNjQgMTguNjcgMjAgMjEiLz48L3N2Zz4="
           />
-          <span>deadline : 2:00 pm, 12 jun 2025</span>
+          <span
+            >deadline : <%= formatDateTime(locals.eventDetails.deadline)
+            %></span
+          >
         </p>
         <div class="event-det-body">
           <p class="event-det-dates">
             <span class="event-det-start-date"
-              >🗓️<span>&nbsp;4:00 PM, 12 Jun 2025</span></span
+              >🗓️<span
+                >&nbsp;<%= formatDateTime(locals.eventDetails.startTime)
+                %></span
+              ></span
             >
             <span>-></span>
             <span class="event-det-end-date"
-              >🗓️<span>&nbsp;6:00 PM, 13 Jun 2025</span></span
+              >🗓️<span
+                >&nbsp;<%= formatDateTime(locals.eventDetails.endTime) %></span
+              ></span
             >
           </p>
           <p class="event-det-venue-details">
@@ -54,8 +68,12 @@
           <div class="event-det-author-details">
             <div>Warm Regards,</div>
             <div class="event-det-author">
-              <div class="event-det-author-name">Dr Lipika Das</div>
-              <div class="event-det-author-position">Chair, HRDC</div>
+              <div class="event-det-author-name">
+                <%= locals.eventDetails.author??'Dr Lipika Das' %>
+              </div>
+              <div class="event-det-author-position">
+                <%= locals.eventDetails.position??'Chair, HRDC' %>
+              </div>
             </div>
           </div>
 

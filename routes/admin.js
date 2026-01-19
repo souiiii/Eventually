@@ -3,6 +3,7 @@ import Event from "../models/Event.js";
 import Registration from "../models/Registration.js";
 import mongoose from "mongoose";
 import validator from "validator";
+import { redirectWithError, redirectWithSuccess } from "../services/message.js";
 
 const router = express.Router();
 
@@ -299,6 +300,8 @@ router.delete("/delete-event/:id", async (req, res) => {
 router.get("/student-registrations/:id", async (req, res) => {
   try {
     const id = req.params.id;
+    const error = req.query.error;
+    const success = req.query.success;
     const now = new Date();
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -316,6 +319,8 @@ router.get("/student-registrations/:id", async (req, res) => {
       eventRegistrations,
       user: req.user,
       now,
+      success,
+      error,
     });
   } catch (err) {
     console.log("Error: ", err.message);
@@ -323,22 +328,14 @@ router.get("/student-registrations/:id", async (req, res) => {
   }
 });
 
-router.post("/mark-attendance/:registrationId_eventId", async (req, res) => {
+router.post("/mark-attendance/:eventId", async (req, res) => {
   try {
-    const ids = req.params.registrationId_eventId.trim();
-    const parts = ids.split("_");
-    if (parts.length !== 2) return res.status(400).send("Invalid Id");
+    const eventId = req.params.eventId;
 
-    const [registrationId, eventId] = parts;
     const code = req.body.code?.trim().toUpperCase();
     const now = new Date();
 
-    if (
-      !registrationId ||
-      !eventId ||
-      !mongoose.Types.ObjectId.isValid(registrationId) ||
-      !mongoose.Types.ObjectId.isValid(eventId)
-    ) {
+    if (!eventId || !mongoose.Types.ObjectId.isValid(eventId)) {
       return res.status(400).send("Invalid Id");
     }
 
@@ -346,28 +343,48 @@ router.post("/mark-attendance/:registrationId_eventId", async (req, res) => {
     if (!event) return res.status(404).send("No such event found");
 
     if (event.startTime > now || event.endTime < now)
-      return res.status(400).send("Event is not live");
+      return redirectWithError("Event is not live", res, eventId);
 
-    if (!code) return res.status(400).send("Enter code before submitting");
+    if (!code) return redirectWithError("Please enter a code", res, eventId);
 
-    if (!(code.length === 9)) return res.status(400).send("Enter valid code");
+    if (!(code.length === 11))
+      return res.status(400).send("Enter valid code", res, eventId);
+
+    let unformattedCodeSprite = code.split("-");
+    if (unformattedCodeSprite.length !== 3)
+      return redirectWithError(
+        "Invalid code format (Use XXX-XXX-XXX)",
+        res,
+        eventId
+      );
+    const finalCode =
+      unformattedCodeSprite[0] +
+      unformattedCodeSprite[1] +
+      unformattedCodeSprite[2];
 
     const registration = await Registration.findOneAndUpdate(
       {
-        _id: registrationId,
         attendanceStatus: "PENDING",
         status: "REGISTERED",
         eventId,
-        registrationCode: code,
+        registrationCode: finalCode,
       },
       { $set: { attendanceStatus: "ATTENDED" } },
       { runValidators: true, new: true }
     );
 
     if (!registration)
-      return res.status(400).send("Invalid Request - Can't mark attendance");
+      return redirectWithError(
+        "Invalid Code or Student already marked present",
+        res,
+        eventId
+      );
 
-    return res.redirect(`/admin/student-registrations/${eventId}`);
+    return redirectWithSuccess(
+      `Attendance marked for ${req.user.fullName}`,
+      res,
+      eventId
+    );
   } catch (err) {
     console.log("Error: ", err.message);
     if (err?.code === 11000)

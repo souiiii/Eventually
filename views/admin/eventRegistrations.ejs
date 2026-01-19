@@ -18,7 +18,40 @@
 
       <div class="heading-div">
         <h1 class="heading">Attendance Management</h1>
+ <% if(isLive) { %>
+  <div class="status-live">LIVE 🔴</div>
+
+<% } else if(isPre) { %>
+  <div class="status-live">PRE-EVENT</div>
+
+  <% } else { %>
+    <div class="status-live">POST-EVENT</div>
+    <% } %>
       </div>
+
+
+      <% if(isLive) { %>
+      <div class="attendance-scanner-div">
+        <div class="attendance-scanner-heading">
+          📋 Quick Attendance Scanner
+        </div>
+        <div class="attendance-scanner-sub-heading">
+          Enter student's registration code to mark attendance instantly
+        </div>
+        <form method="post" action="/admin/mark-attendance/<%=locals.eventRegistrations[0].eventId._id%>" class="attendance-scanner-code-div">
+          <input required
+          name="code"
+            type="text"
+            id="codeInput"
+            placeholder="XXX-XXX-XXX"
+            maxlength="11"
+            class="attendance-scanner-code"
+          />
+          <button class="attendance-scanner-code-button">Mark Attendance</b>
+        </form>
+      </div>
+
+      <% } %>
 
       <div class="attendance-status-div">
         <div class="attendance-registered-div">
@@ -36,8 +69,9 @@
       <div class="attendance-registered-students-list-div">
         <div class="attendance-registered-students-header">
           <div class="attendance-header-name">STUDENT</div>
-          <div class="attendance-header-code">REGISTRATION CODE</div>
-          <div class="attendance-header-status">STATUS</div>
+          <div class="attendance-header-code big">REGISTRATION CODE</div>
+          <div class="attendance-header-code small">EVENT CODE</div>
+          <div class="attendance-header-status">ATTENDANCE</div>
         </div>
 
         <% locals.eventRegistrations.forEach(registration=>{ %>
@@ -59,7 +93,7 @@
 
             <% } else if (isPost) { %> <% if (registration.attendanceStatus ===
             'PENDING') { %>
-            <div class="negative">NOT ATTENDED</div>
+            <div class="negative">UNATTENDED</div>
             <% } else { %>
             <div class="positive">ATTENDED</div>
             <% } %> <% } else { %> <% if (registration.attendanceStatus ===
@@ -76,7 +110,27 @@
         <div class="message">🥲 No registrations yet!</div>
         <% } %>
       </div>
+      <%= locals.error %>
+      <%= locals.success %>
     </div>
     <%- include('../partials/footer.ejs') %>
+    <script>
+      const input = document.getElementById("codeInput");
+
+      input.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/[^A-Za-z0-9]/g, "");
+
+        value = value.toUpperCase().substring(0, 9);
+
+        if (value.length > 6) {
+          value =
+            value.slice(0, 3) + "-" + value.slice(3, 6) + "-" + value.slice(6);
+        } else if (value.length > 3) {
+          value = value.slice(0, 3) + "-" + value.slice(3);
+        }
+
+        e.target.value = value;
+      });
+    </script>
   </body>
 </html>
