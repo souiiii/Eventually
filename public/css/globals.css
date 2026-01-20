@@ -267,6 +267,7 @@ body {
   align-items: center;
   width: 100%;
   gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
 .event-div {
@@ -1215,6 +1216,10 @@ button:hover {
     transform: translateX(-50%);
     box-shadow: 0px 6px 6px var(--shadow-color);
     height: auto;
+  }
+
+  .event-list-div {
+    margin-bottom: 6rem;
   }
 
   .event-det-container {
