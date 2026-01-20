@@ -16,6 +16,7 @@ router.get(
   checkAuthorization(["ADMIN", "STUDENT"]),
   async (req, res) => {
     const { role } = req.user;
+    const success = req.query.success;
     const now = new Date();
     let sort = req.query?.sort;
     if (!sort) sort = "nearest_asc";
@@ -46,6 +47,7 @@ router.get(
       now,
       registeredEvents,
       role,
+      success,
       select: sortt,
       user: req.user,
       url: "/discover",
@@ -84,6 +86,8 @@ router.get(
   checkAuthorization(["ADMIN", "STUDENT"]),
   async (req, res) => {
     const id = req.params.id;
+    const success = req.query.success;
+    const error = req.query.error;
     const now = new Date();
 
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -118,10 +122,23 @@ router.get(
       role: req.user.role,
       user: req.user,
       currOcc,
+      success,
+      error,
       now,
     });
   }
 );
+
+const redirectWithSuccess = (message, eventId, res) => {
+  return res.redirect(
+    `/events/${eventId}?success=${encodeURIComponent(message)}`
+  );
+};
+const redirectWithError = (message, eventId, res) => {
+  return res.redirect(
+    `/events/${eventId}?error=${encodeURIComponent(message)}`
+  );
+};
 
 router.post(
   "/register/:id",
@@ -176,7 +193,7 @@ router.post(
         await registerNew(eventId, userId, event.deadline);
       }
 
-      return res.redirect(`/events/${eventId}`);
+      return redirectWithSuccess("Registered Successfully!", eventId, res);
     } catch (err) {
       console.log("Error: ", err.message);
       return res.status(500).render("common/server-error");
@@ -215,7 +232,7 @@ router.post(
 
       if (!regist) return res.status(400).send("Invalid request");
 
-      return res.redirect(`/events/${eventId}`);
+      return redirectWithError("Registration Cancelled", eventId, res);
     } catch (err) {
       console.log("Error: ", err.message);
       return res.status(500).render("common/server-error");

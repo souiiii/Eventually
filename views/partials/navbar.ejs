@@ -6,6 +6,8 @@
   String(date.getDate()).padStart(2, '0'); return `${dayName}, ${monthName}
   ${day}`; } const today = new Date(); const now = formatDateWithoutYear(today);
   %>
+  <div id="notify" class="notify">Saved successfully</div>
+  <div id="error" class="error">Error</div>
 
   <a href="/" class="nav-logo-div">
     <img src="/images/navbar-logo.png" />

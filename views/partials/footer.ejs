@@ -9,3 +9,44 @@
 
   requestAnimationFrame(raf);
 </script>
+<script>
+  const notify = document.getElementById("notify");
+  const error = document.getElementById('error');
+
+  function showNotification(message, isError) {
+    if (isError){
+      error.textContent = message;
+      error.classList.add("show");
+
+      setTimeout(() => {
+        error.classList.remove("show");
+      }, 1000);
+
+    }else if(!isError){
+      notify.textContent = message;
+      notify.classList.add("show");
+
+      setTimeout(() => {
+        notify.classList.remove("show");
+      }, 1000);
+    }
+
+  }
+
+  <% if (locals.success) { %>
+    showNotification("<%= locals.success %>", false);
+
+    // 🔥 remove query params without reload
+    const url = new URL(window.location.href);
+    url.searchParams.delete("success");
+    window.history.replaceState({}, document.title, url.pathname);
+  <% } %>
+  <% if (locals.error) { %>
+    showNotification("<%= locals.error %>", true);
+
+    // 🔥 remove query params without reload
+    const url = new URL(window.location.href);
+    url.searchParams.delete("error");
+    window.history.replaceState({}, document.title, url.pathname);
+  <% } %>
+</script>

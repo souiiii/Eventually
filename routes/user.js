@@ -1,5 +1,5 @@
 import { compare, hash } from "bcrypt";
-import express from "express";
+import express, { urlencoded } from "express";
 import User from "../models/User.js";
 import validator from "validator";
 import { getUser, setUser } from "../services/auth.js";
@@ -107,6 +107,11 @@ router.post("/signup", async (req, res) => {
 // Post Login
 
 router.post("/login", async (req, res) => {
+  const redirectWithSuccess = (message) => {
+    return res.redirect(
+      `/events/discover?success=${encodeURIComponent(message)}`
+    );
+  };
   try {
     const body = req.body;
     if (!body.email || !body.password)
@@ -154,7 +159,7 @@ router.post("/login", async (req, res) => {
       sameSite: "strict",
     });
 
-    return res.status(200).redirect("/events/discover");
+    return redirectWithSuccess("Logged In Successfully!");
   } catch (err) {
     console.log("Error:", err);
     return res
