@@ -546,7 +546,7 @@ body {
 
 .event-det-heading span {
   padding: 2rem 1rem;
-
+  width: 100%;
   display: -webkit-box;
   text-align: center;
   -webkit-line-clamp: 1;
@@ -869,13 +869,17 @@ body {
 .attendance-scanner-code-button {
   width: fit-content !important;
   flex-shrink: 0;
+  height: 100% !important;
   background-color: var(--accent-color);
   color: var(--prim-color);
-  padding: 1rem;
+  padding: 1.25rem;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 500 !important;
   letter-spacing: 0.75px;
 }
@@ -1216,6 +1220,10 @@ button:hover {
   .event-det-container {
     margin-bottom: 5.5rem;
   }
+
+  .container-border {
+    margin-bottom: 1rem;
+  }
 }
 
 @media (max-width: 804px) {
@@ -1318,6 +1326,24 @@ button:hover {
     padding: 0.5rem;
   }
 
+  .attendance-scanner-sub-heading {
+    font-size: 0.7rem;
+  }
+
+  .attendance-scanner-code {
+    font-size: 1rem;
+    letter-spacing: 5.5px;
+  }
+
+  .attendance-scanner-code-button {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+
+  .attendance-registered-students-list-div {
+    margin-bottom: 6rem;
+  }
+
   .attendance-registered-students-header,
   .attendance-registered-students-tile {
     padding-inline: 1rem;
@@ -1340,6 +1366,7 @@ button:hover {
     letter-spacing: 1px;
     padding: 0.5rem;
     justify-self: center;
+    user-select: text;
   }
 
   .attendance-tile-name {
@@ -1376,6 +1403,11 @@ button:hover {
 
   .event-det-heading {
     font-size: 1.5rem;
+  }
+
+  .attendance-scanner-code {
+    font-size: 0.9rem;
+    letter-spacing: 3.5px;
   }
 
   .event-det-deadline {
@@ -1431,6 +1463,19 @@ button:hover {
     font-size: 0.7rem;
   }
   .attendance-tile-email {
+    font-size: 0.6rem;
+  }
+
+  .attendance-scanner-code-div {
+    gap: 0.5rem;
+  }
+
+  .attendance-scanner-code {
+    letter-spacing: 1px;
+    padding-block: 0.75rem;
+  }
+
+  .attendance-scanner-code-button {
     font-size: 0.6rem;
   }
 
