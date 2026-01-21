@@ -8,6 +8,7 @@
       <%- include('../partials/navbar.ejs') %>
       <div class="add-edit-container">
         <h1 class="headingg margin">Add Event</h1>
+
         <form class="add-edit-form" action="/admin/create-event" method="post">
           <label>
             <p>📝 Event Title</p>
@@ -74,15 +75,13 @@
               required
             />
           </label>
+
           <label>
             <p>🕐 Start Date and Time</p>
-            <input
-              type="datetime-local"
-              name="startTime"
-              id="startDate"
-              required
-            />
+            <input type="datetime-local" id="startUI" required />
+            <input type="hidden" name="startTime" id="startHidden" />
           </label>
+
           <div class="crack">
             <label class="buzz" for="deadline">⏰ Registration Deadline</label>
 
@@ -90,19 +89,19 @@
               <input type="checkbox" id="deadlineCheck" name="deadlineCheck" />
               <label for="deadlineCheck">Same as start date and time</label>
             </div>
-            <input
-              type="datetime-local"
-              name="deadline"
-              id="deadline"
-              required
-            />
+
+            <input type="datetime-local" id="deadlineUI" required />
+            <input type="hidden" name="deadline" id="deadlineHidden" />
+
             <p class="link add-edit-size">
               Last date and time for registration
             </p>
           </div>
+
           <label>
             <p>🕑 End Date and Time</p>
-            <input type="datetime-local" name="endTime" id="endDate" required />
+            <input type="datetime-local" id="endUI" required />
+            <input type="hidden" name="endTime" id="endHidden" />
           </label>
 
           <div class="crack">
@@ -116,8 +115,7 @@
               type="text"
               name="author"
               id="author"
-              data-author="<%=
-            locals.user.fullName %>"
+              data-author="<%= locals.user.fullName %>"
               placeholder="Enter publisher's name"
               maxlength="32"
               required
@@ -139,13 +137,78 @@
       </div>
     </div>
     <%- include('../partials/footer.ejs') %>
+
     <script>
+      console.log("🚀 Create Event Script Loaded");
+
+      // --- 1. CONFIGURATION ---
+      // Map visible inputs to hidden inputs
+      const fields = [
+        { uiId: "startUI", hiddenId: "startHidden" },
+        { uiId: "deadlineUI", hiddenId: "deadlineHidden" },
+        { uiId: "endUI", hiddenId: "endHidden" },
+      ];
+
+      // --- 2. TIME CONVERSION LOGIC ---
+
+      const localStringToUtc = (localString) => {
+        if (!localString) return "";
+        const date = new Date(localString);
+        if (isNaN(date.getTime())) return "";
+        // Convert to UTC ISO String (e.g., 2023-10-27T05:30:00.000Z)
+        return date.toISOString();
+      };
+
+      // --- 3. EVENT LISTENERS ---
+
+      fields.forEach((field) => {
+        const ui = document.getElementById(field.uiId);
+        const hidden = document.getElementById(field.hiddenId);
+
+        if (ui && hidden) {
+          ui.addEventListener("input", (e) => {
+            // When user types, update the hidden field immediately
+            hidden.value = localStringToUtc(e.target.value);
+          });
+        }
+      });
+
+      // --- 4. CHECKBOX LOGIC (Updated) ---
+
       const deadlineCheck = document.getElementById("deadlineCheck");
-      const startTime = document.getElementById("startDate");
-      const deadline = document.getElementById("deadline");
+      const startUI = document.getElementById("startUI");
+      const startHidden = document.getElementById("startHidden");
+      const deadlineUI = document.getElementById("deadlineUI");
+      const deadlineHidden = document.getElementById("deadlineHidden");
+
+      const syncDeadline = () => {
+        // Sync Visual
+        deadlineUI.value = startUI.value;
+        // Sync Hidden Data (Critical!)
+        deadlineHidden.value = startHidden.value;
+      };
+
+      if (deadlineCheck) {
+        deadlineCheck.addEventListener("change", (e) => {
+          if (e.target.checked) {
+            deadlineUI.readOnly = true;
+            syncDeadline(); // Sync immediately
+            startUI.addEventListener("input", syncDeadline); // Keep syncing
+          } else {
+            deadlineUI.readOnly = false;
+            startUI.removeEventListener("input", syncDeadline);
+            deadlineUI.value = "";
+            deadlineHidden.value = ""; // Clear hidden value too
+          }
+        });
+      }
+
+      // --- 5. AUTHOR LOGIC (Unchanged) ---
+
       const author = document.getElementById("author");
       const authorCheck = document.getElementById("authorCheck");
-      const authorName = author.dataset.author;
+      const authorName = author.dataset.author || "";
+
       const finalName = authorName
         .split(" ")
         .reduce(
@@ -154,31 +217,17 @@
         )
         .trim();
 
-      function changeDeadline(e) {
-        deadline.value = e.target.value;
+      if (authorCheck) {
+        authorCheck.addEventListener("change", (e) => {
+          if (e.target.checked) {
+            author.readOnly = true;
+            author.value = finalName;
+          } else {
+            author.readOnly = false;
+            author.value = "";
+          }
+        });
       }
-
-      deadlineCheck.addEventListener("change", function setDeadline(e) {
-        if (e.target.checked) {
-          deadline.setAttribute("readOnly", true);
-          deadline.value = startTime.value;
-          startTime.addEventListener("change", changeDeadline);
-        } else {
-          startTime.removeEventListener("change", changeDeadline);
-          deadline.removeAttribute("readOnly");
-          deadline.value = null;
-        }
-      });
-
-      authorCheck.addEventListener("change", function setAuthor(e) {
-        if (e.target.checked) {
-          author.setAttribute("readOnly", true);
-          author.value = finalName;
-        } else {
-          author.removeAttribute("readOnly");
-          author.value = null;
-        }
-      });
     </script>
   </body>
 </html>

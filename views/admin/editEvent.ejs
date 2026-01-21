@@ -4,10 +4,6 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
-    <% const toDatetimeLocal = (date) => { if (!date) return ''; const d = new
-    Date(date); const pad = (n) => String(n).padStart(2, '0'); return (
-    d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T'
-    + pad(d.getHours()) + ':' + pad(d.getMinutes()) ); }; %>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
 
@@ -78,32 +74,28 @@
 
           <label>
             <p>🕐 Start Date and Time</p>
+            <input type="datetime-local" id="startUI" required />
             <input
-              type="datetime-local"
+              type="hidden"
               name="startTime"
-              id="startDate"
-              value="<%= toDatetimeLocal(locals.event.startTime) %>"
-              required
+              id="startHidden"
+              value="<%= locals.event.startTime ? new Date(locals.event.startTime).toISOString() : '' %>"
             />
           </label>
 
           <div class="crack">
             <label class="buzz">⏰ Registration Deadline</label>
-
             <div class="checkk">
               <input type="checkbox" id="deadlineCheck" />
               <label for="deadlineCheck">Same as start date and time</label>
             </div>
-
+            <input type="datetime-local" id="deadlineUI" required />
             <input
-              type="datetime-local"
+              type="hidden"
               name="deadline"
-              id="deadline"
-              value="<%= toDatetimeLocal(locals.event.deadline) %>"
-              data-start="<%= toDatetimeLocal(locals.event.startTime) %>"
-              required
+              id="deadlineHidden"
+              value="<%= locals.event.deadline ? new Date(locals.event.deadline).toISOString() : '' %>"
             />
-
             <p class="link add-edit-size">
               Last date and time for registration
             </p>
@@ -111,28 +103,28 @@
 
           <label>
             <p>🕑 End Date and Time</p>
+            <input type="datetime-local" id="endUI" required />
             <input
-              type="datetime-local"
+              type="hidden"
               name="endTime"
-              value="<%= toDatetimeLocal(locals.event.endTime) %>"
-              required
+              id="endHidden"
+              value="<%= locals.event.endTime ? new Date(locals.event.endTime).toISOString() : '' %>"
             />
           </label>
 
           <div class="crack">
             <label class="buzz">📋 Publisher's Name</label>
-
             <div class="checkk">
               <input type="checkbox" id="authorCheck" />
               <label for="authorCheck">Same as admin's name</label>
             </div>
-
             <input
               type="text"
               name="author"
               id="author"
               value="<%= locals.event.author ?? 'Dr Lipika Das' %>"
               data-author="<%= locals.user.fullName %>"
+              data-original-author="<%= locals.event.author %>"
               maxlength="32"
               required
             />
@@ -157,48 +149,104 @@
     <%- include('../partials/footer.ejs') %>
 
     <script>
+      // 1. Select all elements
+      const startUI = document.getElementById("startUI");
+      const startHidden = document.getElementById("startHidden");
+      const deadlineUI = document.getElementById("deadlineUI");
+      const deadlineHidden = document.getElementById("deadlineHidden");
+      const endUI = document.getElementById("endUI");
+      const endHidden = document.getElementById("endHidden");
+
+      // 2. HELPER: UTC ISO -> Local YYYY-MM-DDTHH:mm
+      const setLocalTime = (uiElement, utcValue) => {
+        if (!uiElement || !utcValue) return;
+        const date = new Date(utcValue);
+        if (isNaN(date.getTime())) return;
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - offset * 60000);
+        uiElement.value = localDate.toISOString().slice(0, 16);
+      };
+
+      // 3. HELPER: Local UI -> UTC ISO
+      const updateHidden = (uiElement, hiddenElement) => {
+        if (!uiElement.value) {
+          hiddenElement.value = "";
+          return;
+        }
+        const date = new Date(uiElement.value);
+        hiddenElement.value = date.toISOString(); // Adds the 'Z'
+      };
+
+      // 4. INITIALIZE: Convert DB UTC values to Local UI values on load
+      setLocalTime(startUI, startHidden.value);
+      setLocalTime(deadlineUI, deadlineHidden.value);
+      setLocalTime(endUI, endHidden.value);
+
+      // Store original deadline for the "uncheck" revert logic
+      deadlineUI.dataset.original = deadlineUI.value;
+
+      // 5. LISTENERS: Update Hidden fields whenever UI changes
+      startUI.addEventListener("input", () =>
+        updateHidden(startUI, startHidden)
+      );
+      deadlineUI.addEventListener("input", () =>
+        updateHidden(deadlineUI, deadlineHidden)
+      );
+      endUI.addEventListener("input", () => updateHidden(endUI, endHidden));
+
+      // 6. CHECKBOX LOGIC (Deadline)
       const deadlineCheck = document.getElementById("deadlineCheck");
-      const startTime = document.getElementById("startDate");
-      const deadline = document.getElementById("deadline");
-
-      const author = document.getElementById("author");
-      const authorCheck = document.getElementById("authorCheck");
-      const authorName = author.dataset.author;
-
-      const finalName = authorName
-        .split(" ")
-        .map((w) => w[0].toUpperCase() + w.slice(1))
-        .join(" ");
-
-      function syncDeadline(e) {
-        deadline.value = e.target.value;
+      function syncDeadline() {
+        deadlineUI.value = startUI.value;
+        deadlineHidden.value = startHidden.value;
       }
 
-      deadlineCheck.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          deadline.readOnly = true;
-          deadline.value = startTime.value;
-          startTime.addEventListener("change", syncDeadline);
-        } else {
-          deadline.readOnly = false;
-          startTime.removeEventListener("change", syncDeadline);
-          deadline.value = deadline.dataset.start;
-        }
-      });
+      if (deadlineCheck) {
+        deadlineCheck.addEventListener("change", (e) => {
+          if (e.target.checked) {
+            deadlineUI.readOnly = true;
+            syncDeadline();
+            startUI.addEventListener("input", syncDeadline);
+            deadlineUI.style.backgroundColor = "#eee";
+            deadlineUI.style.color = "#666";
+          } else {
+            deadlineUI.readOnly = false;
+            startUI.removeEventListener("input", syncDeadline);
+            if (deadlineUI.dataset.original) {
+              deadlineUI.value = deadlineUI.dataset.original;
+              updateHidden(deadlineUI, deadlineHidden);
+            }
+            deadlineUI.style.backgroundColor = "unset";
+            deadlineUI.style.color = "unset";
+          }
+        });
+      }
 
-      authorCheck.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          author.readOnly = true;
-          author.value = finalName;
-          author.style.backgroundColor = "#eee";
-          author.style.color = "#555";
-        } else {
-          author.readOnly = false;
-          author.value = "";
-          author.style.backgroundColor = "unset";
-          author.style.color = "unset";
-        }
-      });
+      // 7. AUTHOR LOGIC
+      const author = document.getElementById("author");
+      const authorCheck = document.getElementById("authorCheck");
+      if (authorCheck && author) {
+        const authorName = author.dataset.author || "";
+        const finalName = authorName
+          .split(" ")
+          .map((w) => w[0].toUpperCase() + w.slice(1))
+          .join(" ");
+        const originalName = author.dataset.originalAuthor;
+
+        authorCheck.addEventListener("change", (e) => {
+          if (e.target.checked) {
+            author.readOnly = true;
+            author.value = finalName;
+            author.style.backgroundColor = "#eee";
+            author.style.color = "#666";
+          } else {
+            author.readOnly = false;
+            author.value = originalName;
+            author.style.backgroundColor = "unset";
+            author.style.color = "unset";
+          }
+        });
+      }
     </script>
   </body>
 </html>

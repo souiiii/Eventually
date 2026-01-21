@@ -10,15 +10,15 @@ const router = express.Router();
 const toDatetimeLocalUTC = (d) => {
   const pad = (n) => String(n).padStart(2, "0");
   return (
-    d.getUTCFullYear() +
+    d.getFullYear() +
     "-" +
-    pad(d.getUTCMonth() + 1) +
+    pad(d.getMonth() + 1) +
     "-" +
-    pad(d.getUTCDate()) +
+    pad(d.getDate()) +
     "T" +
-    pad(d.getUTCHours()) +
+    pad(d.getHours()) +
     ":" +
-    pad(d.getUTCMinutes())
+    pad(d.getMinutes())
   );
 };
 
@@ -150,7 +150,7 @@ router.get("/edit-event/:id", async (req, res) => {
     let event = await Event.findById(id);
     event = event.toObject();
     if (!event) return res.status(404).send("Bad request");
-    console.log(event.startTime);
+
     return res.render("admin/editEvent", {
       event: {
         ...event,

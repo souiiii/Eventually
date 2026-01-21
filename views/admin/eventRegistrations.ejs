@@ -5,38 +5,47 @@
   </head>
   <body>
     <div class="main">
-      <%- include('../partials/navbar.ejs') %> <% const isLive =
-      (locals.eventRegistrations.length && locals.now <
-      locals.eventRegistrations[0].eventId.endTime && locals.now >=
-      locals.eventRegistrations[0].eventId.startTime); const isPost
-      =(locals.eventRegistrations.length &&
-      locals.now>=locals.eventRegistrations[0].eventId.endTime); const
-      isPre=(locals.eventRegistrations.length &&
-      locals.now<=locals.eventRegistrations[0].eventId.startTime); const
-      attended =locals.eventRegistrations.reduce((acc,
-      r)=>(r.attendanceStatus==='ATTENDED')?acc+1:acc,0)
-          const formatDateTime = (iso) => { if (!iso) return ''; const d = new
-    Date(iso); const time = d.toLocaleTimeString("en-US", { hour: "numeric",
-    minute: "2-digit", hour12: true }); const date =
-    d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year:
-    "numeric" }); return `${time}, ${date}`; }; %>
+      <%- include('../partials/navbar.ejs') %> 
+      
+      <% 
+        // --- LOGIC FIX START ---
+        // Use eventDetails to get times, not registrations
+        const now = new Date(); 
+        const start = new Date(locals.eventDetails.startTime);
+        const end = new Date(locals.eventDetails.endTime);
 
+        const isPre = now < start;
+        const isLive = now >= start && now < end;
+        const isPost = now >= end;
 
+        const attended = locals.eventRegistrations.reduce((acc, r) =>
+            (r.attendanceStatus==='ATTENDED') ? acc+1 : acc, 0
+        );
+
+        const formatDateTime = (iso) => { 
+            if (!iso) return ''; 
+            const d = new Date(iso); 
+            const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); 
+            const date = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }); 
+            return `${time}, ${date}`; 
+        }; 
+        // --- LOGIC FIX END ---
+      %>
 
       <div class="heading-div">
         <h1 class="heading">Attendance Management</h1>
- <% if(isLive) { %>
-  <div class="status-live">LIVE 🔴</div>
+        <% if(isLive) { %>
+        <div class="status-live">LIVE 🔴</div>
 
-<% } else if(isPre) { %>
-  <div class="status-live">PRE-EVENT</div>
+        <% } else if(isPre) { %>
+        <div class="status-live">PRE-EVENT</div>
 
-  <% } else { %>
-    <div class="status-live">POST-EVENT</div>
-    <% } %>
+        <% } else { %>
+        <div class="status-live">POST-EVENT</div>
+        <% } %>
       </div>
 
-          <div class="event-det-container container-border">
+      <div class="event-det-container container-border">
         <h1 class="event-det-heading">
           <% if(isLive) { %>
           <div class="event-det-live">🔴Live</div>
@@ -47,51 +56,35 @@
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZGZkZmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1hbGFybS1jbG9jay1pY29uIGx1Y2lkZS1hbGFybS1jbG9jayI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMyIgcj0iOCIvPjxwYXRoIGQ9Ik0xMiA5djRsMiAyIi8+PHBhdGggZD0iTTUgMyAyIDYiLz48cGF0aCBkPSJtMjIgNi0zLTMiLz48cGF0aCBkPSJNNi4zOCAxOC43IDQgMjEiLz48cGF0aCBkPSJNMTcuNjQgMTguNjcgMjAgMjEiLz48L3N2Zz4="
           />
-          <span
-            >deadline : <%= formatDateTime(locals.eventDetails.deadline)
-            %></span
-          >
+          <span>deadline : <%= formatDateTime(locals.eventDetails.deadline) %></span>
         </p>
         <div class="event-det-body">
           <p class="event-det-dates prim">
             <span class="event-det-start-date"
-              >🗓️<span
-                >&nbsp;<%= formatDateTime(locals.eventDetails.startTime)
-                %></span
-              ></span
-            >
+              >🗓️<span>&nbsp;<%= formatDateTime(locals.eventDetails.startTime) %></span>
+            </span>
             <span>-></span>
             <span class="event-det-end-date"
-              >🗓️<span
-                >&nbsp;<%= formatDateTime(locals.eventDetails.endTime) %></span
-              ></span
-            >
+              >🗓️<span>&nbsp;<%= formatDateTime(locals.eventDetails.endTime) %></span>
+            </span>
           </p>
-          <!-- <p class="event-det-venue-details prim">
-            <span class="sub-det"
-              >Orgainiser:
-              <span><%= locals.eventDetails.organiser %></span></span
-            >
-            <span class="sub-det"
-              >📍Venue: <span><%= locals.eventDetails.venue %></span></span
-            >
-          </p> -->
-          </div></div>
-
-
-
+        </div>
+      </div>
 
       <% if(isLive) { %>
       <div class="attendance-scanner-div">
-        <div class="attendance-scanner-heading">
-          📋 Quick Attendance Scanner
-        </div>
+        <div class="attendance-scanner-heading">📋 Quick Attendance Scanner</div>
         <div class="attendance-scanner-sub-heading">
           Enter student's registration code to mark attendance instantly
         </div>
-        <form method="post" action="/admin/mark-attendance/<%=locals.eventRegistrations[0].eventId._id%>" class="attendance-scanner-code-div">
-          <input required
-          name="code"
+        <form
+          method="post"
+          action="/admin/mark-attendance/<%= locals.eventDetails._id %>"
+          class="attendance-scanner-code-div"
+        >
+          <input
+            required
+            name="code"
             type="text"
             id="codeInput"
             placeholder="XXX-XXX-XXX"
@@ -161,7 +154,6 @@
         <div class="message">🥲 No registrations yet!</div>
         <% } %>
       </div>
-  
     </div>
     <%- include('../partials/footer.ejs') %>
     <script>
