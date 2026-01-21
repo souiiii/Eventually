@@ -15,12 +15,11 @@
       locals.now<=locals.eventRegistrations[0].eventId.startTime); const
       attended =locals.eventRegistrations.reduce((acc,
       r)=>(r.attendanceStatus==='ATTENDED')?acc+1:acc,0)
-         const formatDateTime = (iso) => { const d = new Date(iso); const time =
-    d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12:
-    true, timeZone: "UTC", }); const date = d.toLocaleDateString("en-GB", { day:
-    "2-digit", month: "short", year: "numeric", timeZone: "UTC",
-    }); return `${time}, ${date}`; }; 
-      %>
+          const formatDateTime = (iso) => { if (!iso) return ''; const d = new
+    Date(iso); const time = d.toLocaleTimeString("en-US", { hour: "numeric",
+    minute: "2-digit", hour12: true }); const date =
+    d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year:
+    "numeric" }); return `${time}, ${date}`; }; %>
 
 
 

@@ -7,6 +7,21 @@ import { redirectWithError, redirectWithSuccess } from "../services/message.js";
 
 const router = express.Router();
 
+const toDatetimeLocalUTC = (d) => {
+  const pad = (n) => String(n).padStart(2, "0");
+  return (
+    d.getUTCFullYear() +
+    "-" +
+    pad(d.getUTCMonth() + 1) +
+    "-" +
+    pad(d.getUTCDate()) +
+    "T" +
+    pad(d.getUTCHours()) +
+    ":" +
+    pad(d.getUTCMinutes())
+  );
+};
+
 router.get("/create-event", (req, res) => {
   return res.render("admin/addEvent", { user: req.user });
 });
@@ -135,12 +150,13 @@ router.get("/edit-event/:id", async (req, res) => {
     let event = await Event.findById(id);
     event = event.toObject();
     if (!event) return res.status(404).send("Bad request");
+    console.log(event.startTime);
     return res.render("admin/editEvent", {
       event: {
         ...event,
-        startTime: event.startTime.toISOString().slice(0, 16),
-        endTime: event.endTime.toISOString().slice(0, 16),
-        deadline: event.deadline.toISOString().slice(0, 16),
+        startTime: toDatetimeLocalUTC(event.startTime),
+        endTime: toDatetimeLocalUTC(event.endTime),
+        deadline: toDatetimeLocalUTC(event.deadline),
       },
       user: req.user,
     });

@@ -4,13 +4,19 @@
     <%- include('../partials/header.ejs') %>
   </head>
   <body>
+    <% const toDatetimeLocal = (date) => { if (!date) return ''; const d = new
+    Date(date); const pad = (n) => String(n).padStart(2, '0'); return (
+    d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T'
+    + pad(d.getHours()) + ':' + pad(d.getMinutes()) ); }; %>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
+
       <div class="add-edit-container">
         <h1 class="headingg margin">Edit Event</h1>
+
         <form
           class="add-edit-form"
-          action="/admin/edit-event/<%= locals.event._id  %>"
+          action="/admin/edit-event/<%= locals.event._id %>"
           method="post"
         >
           <label>
@@ -19,176 +25,176 @@
               type="text"
               name="title"
               value="<%= locals.event.title %>"
-              placeholder="Enter event title"
               minlength="20"
-              id="title"
               required
             />
           </label>
+
           <label>
             <p>📄 Short Description</p>
-            <textarea
-              type="text"
-              name="shortDescription"
-              placeholder="Enter a brief description"
-              id="shortDescription"
-              minlength="100"
-              required
-            >
+            <textarea name="shortDescription" minlength="100" required>
 <%= locals.event.shortDescription %></textarea
             >
           </label>
+
           <label>
             <p>📋 Session Overview</p>
-            <textarea
-              type="text"
-              name="description"
-              placeholder="Enter detailed session overview"
-              id="description"
-              minlength="100"
-              required
-            >
+            <textarea name="description" minlength="100" required>
 <%= locals.event.description %></textarea
             >
           </label>
+
           <label>
             <p>🏢 Organiser's Name</p>
             <input
               type="text"
-              value="<%= locals.event.organiser %>"
-              placeholder="Enter organization name (e.g., IEEE, HRDC)"
               name="organiser"
-              id="organiser"
+              value="<%= locals.event.organiser %>"
               required
             />
           </label>
+
           <label>
             <p>📍 Venue</p>
             <input
-              placeholder="Enter venue location"
-              value="<%= locals.event.venue %>"
               type="text"
               name="venue"
-              id="venue"
+              value="<%= locals.event.venue %>"
               required
             />
           </label>
+
           <label>
             <p>👥 Venue Capacity</p>
             <input
               type="number"
-              value="<%= locals.event.capacity %>"
               name="capacity"
-              id="capacity"
-              placeholder="Enter venue capacity"
+              value="<%= locals.event.capacity %>"
               min="1"
               max="100000"
               required
             />
           </label>
+
           <label>
             <p>🕐 Start Date and Time</p>
             <input
-              value="<%= locals.event.startTime %>"
               type="datetime-local"
               name="startTime"
               id="startDate"
+              value="<%= toDatetimeLocal(locals.event.startTime) %>"
               required
             />
           </label>
+
           <div class="crack">
-            <label class="buzz" for="deadline">⏰ Registration Deadline</label>
+            <label class="buzz">⏰ Registration Deadline</label>
 
             <div class="checkk">
-              <input type="checkbox" id="deadlineCheck" name="deadlineCheck" />
+              <input type="checkbox" id="deadlineCheck" />
               <label for="deadlineCheck">Same as start date and time</label>
             </div>
+
             <input
-              value="<%= locals.event.deadline %>"
               type="datetime-local"
               name="deadline"
-              data-start="<%= locals.event.startTime %>"
               id="deadline"
+              value="<%= toDatetimeLocal(locals.event.deadline) %>"
+              data-start="<%= toDatetimeLocal(locals.event.startTime) %>"
               required
             />
+
             <p class="link add-edit-size">
               Last date and time for registration
             </p>
           </div>
+
           <label>
             <p>🕑 End Date and Time</p>
             <input
               type="datetime-local"
-              value="<%= locals.event.endTime %>"
               name="endTime"
-              id="endDate"
+              value="<%= toDatetimeLocal(locals.event.endTime) %>"
               required
             />
           </label>
 
           <div class="crack">
-            <label for="author" class="buzz">📋 Publisher's Name</label>
+            <label class="buzz">📋 Publisher's Name</label>
 
             <div class="checkk">
-              <input type="checkbox" id="authorCheck" name="authorCheck" />
+              <input type="checkbox" id="authorCheck" />
               <label for="authorCheck">Same as admin's name</label>
             </div>
-            <input type="text" value="<%= locals.event.author ?? "Dr Lipika Das"
-            %>" name="author" data-author="<%= locals.event.author %>"
-            id="author" data-author="<%= locals.user.fullName %>"
-            placeholder="Enter publisher's name" maxlength="32" required />
+
+            <input
+              type="text"
+              name="author"
+              id="author"
+              value="<%= locals.event.author ?? 'Dr Lipika Das' %>"
+              data-author="<%= locals.user.fullName %>"
+              maxlength="32"
+              required
+            />
           </div>
+
           <label>
             <p>📋 Publisher's Position</p>
-            <input type="text" value="<%= locals.event.position ?? "Chair, HRDC"
-            %>" name="position" id="position" placeholder="Enter publisher's job
-            position" maxlength="32" required />
+            <input
+              type="text"
+              name="position"
+              value="<%= locals.event.position ?? 'Chair, HRDC' %>"
+              maxlength="32"
+              required
+            />
           </label>
+
           <button class="add-edit-button" type="submit">✨ Make Changes</button>
         </form>
       </div>
     </div>
+
     <%- include('../partials/footer.ejs') %>
+
     <script>
       const deadlineCheck = document.getElementById("deadlineCheck");
       const startTime = document.getElementById("startDate");
       const deadline = document.getElementById("deadline");
+
       const author = document.getElementById("author");
       const authorCheck = document.getElementById("authorCheck");
       const authorName = author.dataset.author;
+
       const finalName = authorName
         .split(" ")
-        .reduce(
-          (acc, w) => acc + " " + w.slice(0, 1).toUpperCase() + w.slice(1),
-          ""
-        )
-        .trim();
+        .map((w) => w[0].toUpperCase() + w.slice(1))
+        .join(" ");
 
-      function changeDeadline(e) {
+      function syncDeadline(e) {
         deadline.value = e.target.value;
       }
 
-      deadlineCheck.addEventListener("change", function setDeadline(e) {
+      deadlineCheck.addEventListener("change", (e) => {
         if (e.target.checked) {
-          deadline.setAttribute("readOnly", true);
+          deadline.readOnly = true;
           deadline.value = startTime.value;
-          startTime.addEventListener("change", changeDeadline);
+          startTime.addEventListener("change", syncDeadline);
         } else {
-          startTime.removeEventListener("change", changeDeadline);
-          deadline.removeAttribute("readOnly");
+          deadline.readOnly = false;
+          startTime.removeEventListener("change", syncDeadline);
           deadline.value = deadline.dataset.start;
         }
       });
 
-      authorCheck.addEventListener("change", function setAuthor(e) {
+      authorCheck.addEventListener("change", (e) => {
         if (e.target.checked) {
-          author.setAttribute("readOnly", true);
+          author.readOnly = true;
+          author.value = finalName;
           author.style.backgroundColor = "#eee";
           author.style.color = "#555";
-          author.value = finalName;
         } else {
-          author.removeAttribute("readOnly");
-          author.value = author.dataset.author;
+          author.readOnly = false;
+          author.value = "";
           author.style.backgroundColor = "unset";
           author.style.color = "unset";
         }
