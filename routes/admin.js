@@ -23,7 +23,9 @@ router.post("/create-event", async (req, res) => {
       !body.capacity ||
       !body.deadline ||
       !body.startTime ||
-      !body.endTime
+      !body.endTime ||
+      !body.author ||
+      !body.position
     )
       return res.status(400).render("admin/addEvent", {
         error: "Field data missing",
@@ -39,6 +41,8 @@ router.post("/create-event", async (req, res) => {
       typeof body.deadline !== "string" ||
       typeof body.startTime !== "string" ||
       typeof body.endTime !== "string" ||
+      typeof body.author !== "string" ||
+      typeof body.position !== "string" ||
       !validator.isISO8601(body.deadline, {
         strict: false,
         strictSeparator: true,
@@ -61,6 +65,8 @@ router.post("/create-event", async (req, res) => {
     const shortDescription = body.shortDescription.trim();
     const description = body.description.trim();
     const organiser = body.organiser.trim();
+    const position = body.position.trim();
+    const author = body.author.trim();
     const capacity = Number(body.capacity.trim());
     const venue = body.venue.trim();
     const deadline = new Date(body.deadline.trim());
@@ -108,6 +114,8 @@ router.post("/create-event", async (req, res) => {
       deadline,
       startTime,
       endTime,
+      position,
+      author,
     });
 
     return res.redirect("/events");
@@ -141,6 +149,7 @@ router.get("/edit-event/:id", async (req, res) => {
     return res.status(500).render("common/server-error");
   }
 });
+
 router.post("/edit-event/:id", async (req, res) => {
   try {
     const body = req.body;
@@ -184,6 +193,8 @@ router.post("/edit-event/:id", async (req, res) => {
       !body.capacity ||
       !body.deadline ||
       !body.startTime ||
+      !body.author ||
+      !body.position ||
       !body.endTime
     ) {
       return renderEdit("Field data missing");
@@ -199,6 +210,8 @@ router.post("/edit-event/:id", async (req, res) => {
       typeof body.deadline !== "string" ||
       typeof body.startTime !== "string" ||
       typeof body.endTime !== "string" ||
+      typeof body.position !== "string" ||
+      typeof body.author !== "string" ||
       !validator.isISO8601(body.deadline, {
         strict: false,
         strictSeparator: true,
@@ -219,6 +232,8 @@ router.post("/edit-event/:id", async (req, res) => {
     const shortDescription = body.shortDescription.trim();
     const description = body.description.trim();
     const organiser = body.organiser.trim();
+    const position = body.position.trim();
+    const author = body.author.trim();
     const capacity = Number(body.capacity.trim());
     const venue = body.venue.trim();
     const deadline = new Date(body.deadline.trim());
@@ -254,6 +269,8 @@ router.post("/edit-event/:id", async (req, res) => {
           description,
           organiser,
           capacity,
+          author,
+          position,
           venue,
           deadline,
           startTime,

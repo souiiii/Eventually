@@ -6,72 +6,179 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <h1>Add Event</h1>
-      <form action="/admin/create-event" method="post">
-        <label>
-          <p>Enter Title</p>
-          <input type="text" name="title" minlength="20" id="title" required />
-        </label>
-        <label>
-          <p>Enter Short Description</p>
-          <input
-            type="text"
-            name="shortDescription"
-            id="shortDescription"
-            minlength="100"
-            required
-          />
-        </label>
-        <label>
-          <p>Enter Description</p>
-          <input
-            type="text"
-            name="description"
-            id="description"
-            minlength="100"
-            required
-          />
-        </label>
-        <label>
-          <p>Enter organiser's name</p>
-          <input type="text" name="organiser" id="organiser" required />
-        </label>
-        <label>
-          <p>Enter Venue</p>
-          <input type="text" name="venue" id="venue" required />
-        </label>
-        <label>
-          <p>Enter venue capacity</p>
-          <input
-            type="number"
-            name="capacity"
-            id="capacity"
-            min="1"
-            max="100000"
-            required
-          />
-        </label>
-        <label>
-          <p>Enter Start Date and time</p>
-          <input
-            type="datetime-local"
-            name="startTime"
-            id="startDate"
-            required
-          />
-        </label>
-        <label>
-          <p>Enter End Date and time</p>
-          <input type="datetime-local" name="endTime" id="endDate" required />
-        </label>
-        <label>
-          <p>Enter Registration Deadline</p>
-          <input type="datetime-local" name="deadline" id="deadline" required />
-        </label>
-        <button type="submit">Create Event</button>
-      </form>
-      <div><%= locals.error %></div>
+      <div class="add-edit-container">
+        <h1 class="headingg margin">Add Event</h1>
+        <form class="add-edit-form" action="/admin/create-event" method="post">
+          <label>
+            <p>📝 Event Title</p>
+            <input
+              type="text"
+              name="title"
+              placeholder="Enter event title"
+              minlength="20"
+              id="title"
+              required
+            />
+          </label>
+          <label>
+            <p>📄 Short Description</p>
+            <textarea
+              type="text"
+              name="shortDescription"
+              placeholder="Enter a brief description"
+              id="shortDescription"
+              minlength="100"
+              required
+            ></textarea>
+          </label>
+          <label>
+            <p>📋 Session Overview</p>
+            <textarea
+              type="text"
+              name="description"
+              placeholder="Enter detailed session overview"
+              id="description"
+              minlength="100"
+              required
+            ></textarea>
+          </label>
+          <label>
+            <p>🏢 Organiser's Name</p>
+            <input
+              type="text"
+              placeholder="Enter organization name (e.g., IEEE, HRDC)"
+              name="organiser"
+              id="organiser"
+              required
+            />
+          </label>
+          <label>
+            <p>📍 Venue</p>
+            <input
+              placeholder="Enter venue location"
+              type="text"
+              name="venue"
+              id="venue"
+              required
+            />
+          </label>
+          <label>
+            <p>👥 Venue Capacity</p>
+            <input
+              type="number"
+              name="capacity"
+              id="capacity"
+              placeholder="Enter venue capacity"
+              min="1"
+              max="100000"
+              required
+            />
+          </label>
+          <label>
+            <p>🕐 Start Date and Time</p>
+            <input
+              type="datetime-local"
+              name="startTime"
+              id="startDate"
+              required
+            />
+          </label>
+          <div class="crack">
+            <label class="buzz" for="deadline">⏰ Registration Deadline</label>
+
+            <div class="checkk">
+              <input type="checkbox" id="deadlineCheck" name="deadlineCheck" />
+              <label for="deadlineCheck">Same as start date and time</label>
+            </div>
+            <input
+              type="datetime-local"
+              name="deadline"
+              id="deadline"
+              required
+            />
+            <p class="link add-edit-size">
+              Last date and time for registration
+            </p>
+          </div>
+          <label>
+            <p>🕑 End Date and Time</p>
+            <input type="datetime-local" name="endTime" id="endDate" required />
+          </label>
+
+          <div class="crack">
+            <label for="author" class="buzz">📋 Publisher's Name</label>
+
+            <div class="checkk">
+              <input type="checkbox" id="authorCheck" name="authorCheck" />
+              <label for="authorCheck">Same as admin's name</label>
+            </div>
+            <input
+              type="text"
+              name="author"
+              id="author"
+              data-author="<%=
+            locals.user.fullName %>"
+              placeholder="Enter publisher's name"
+              maxlength="32"
+              required
+            />
+          </div>
+          <label>
+            <p>📋 Publisher's Position</p>
+            <input
+              type="text"
+              name="position"
+              id="position"
+              placeholder="Enter publisher's job position"
+              maxlength="32"
+              required
+            />
+          </label>
+          <button class="add-edit-button" type="submit">✨ Create Event</button>
+        </form>
+      </div>
     </div>
     <%- include('../partials/footer.ejs') %>
+    <script>
+      const deadlineCheck = document.getElementById("deadlineCheck");
+      const startTime = document.getElementById("startDate");
+      const deadline = document.getElementById("deadline");
+      const author = document.getElementById("author");
+      const authorCheck = document.getElementById("authorCheck");
+      const authorName = author.dataset.author;
+      const finalName = authorName
+        .split(" ")
+        .reduce(
+          (acc, w) => acc + " " + w.slice(0, 1).toUpperCase() + w.slice(1),
+          ""
+        )
+        .trim();
+
+      function changeDeadline(e) {
+        deadline.value = e.target.value;
+      }
+
+      deadlineCheck.addEventListener("change", function setDeadline(e) {
+        if (e.target.checked) {
+          deadline.setAttribute("readOnly", true);
+          deadline.value = startTime.value;
+          startTime.addEventListener("change", changeDeadline);
+        } else {
+          startTime.removeEventListener("change", changeDeadline);
+          deadline.removeAttribute("readOnly");
+          deadline.value = null;
+        }
+      });
+
+      authorCheck.addEventListener("change", function setAuthor(e) {
+        if (e.target.checked) {
+          author.setAttribute("readOnly", true);
+          author.value = finalName;
+        } else {
+          author.removeAttribute("readOnly");
+          author.value = null;
+        }
+      });
+    </script>
   </body>
 </html>
