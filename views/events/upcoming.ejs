@@ -44,14 +44,26 @@
         to12Hour(startDate); const endTimeText = to12Hour(endDate); const
         startDateText = `${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
+<div class="event-div">
+<% if(locals.role==='ADMIN') { %>
+            <div class="admin-action-form">
+            <%if(event.startTime > locals.now) { %>
+            <a href="/admin/edit-event/<%= event._id %>" class="admin-edit-button"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjNTM2MWJkIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtcGVuY2lsLWljb24gbHVjaWRlLXBlbmNpbCI+PHBhdGggZD0iTTIxLjE3NCA2LjgxMmExIDEgMCAwIDAtMy45ODYtMy45ODdMMy44NDIgMTYuMTc0YTIgMiAwIDAgMC0uNS44M2wtMS4zMjEgNC4zNTJhLjUuNSAwIDAgMCAuNjIzLjYyMmw0LjM1My0xLjMyYTIgMiAwIDAgMCAuODMtLjQ5N3oiLz48cGF0aCBkPSJtMTUgNSA0IDQiLz48L3N2Zz4=" /></a>
+            
+            <form class="admin-delete-form" method="post" action="/admin/delete-event/<%= event._id %>">
+              <button type="submit" class="admin-delete-button"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjNTM2MWJkIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtdHJhc2gtaWNvbiBsdWNpZGUtdHJhc2giPjxwYXRoIGQ9Ik0xOSA2djE0YTIgMiAwIDAgMS0yIDJIN2EyIDIgMCAwIDEtMi0yVjYiLz48cGF0aCBkPSJNMyA2aDE4Ii8+PHBhdGggZD0iTTggNlY0YTIgMiAwIDAgMSAyLTJoNGEyIDIgMCAwIDEgMiAydjIiLz48L3N2Zz4="/></button>
+            </form>
+            <% } %>
+            </div>
 
-        <a href="/events/<%= event._id %>" class="event-div">
+          <% } %>
+        <a href="/events/<%= event._id %>" class="event-child-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
               <div class="event-start-date"><%= startDateText %></div>
               <div class="event-end-time"><%= endTimeText %></div>
-              <img class="dotted-line" src="/images/dotted-line.png" />
+              <img class="dotted-line" src="/images/dotted-line1.webp" />
             </div>
           </div>
 
@@ -61,6 +73,8 @@
               <%= event.shortDescription %>
             </div>
           </div>
+
+          
 
           <% if (event.startTime <= locals.now && event.endTime >= locals.now) {
           %> <% if (locals.role === 'ADMIN') { %>
@@ -83,6 +97,8 @@
           <% } %> <% } %>
          
         </a>
+</div>
+
 
         <% }) %>
       </div>

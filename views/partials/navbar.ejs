@@ -11,7 +11,7 @@
   <div id="error" class="error">Error</div>
 
   <a href="/" class="nav-logo-div">
-    <img src="/images/navbar-logo.png" />
+    <img src="/images/navbar-logo1.webp" />
   </a>
 
   <% if(!locals.user) { %>
@@ -40,7 +40,7 @@
         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGREZERkQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1sZWFmLWljb24gbHVjaWRlLWxlYWYiPjxwYXRoIGQ9Ik0xMSAyMEE3IDcgMCAwIDEgOS44IDYuMUMxNS41IDUgMTcgNC40OCAxOSAyYzEgMiAyIDQuMTggMiA4IDAgNS41LTQuNzggMTAtMTAgMTBaIi8+PHBhdGggZD0iTTIgMjFjMC0zIDEuODUtNS4zNiA1LjA4LTZDOS41IDE0LjUyIDEyIDEzIDEzIDEyIi8+PC9zdmc+"
       />
       <% const ignore =
-      ['mohammad','muhammad','md','mohd','syed','sayed','shaikh','sheikh','abdul','abdur'];
+      ['mohammad','muhammad','md','mohd','syed','sayed','shaikh','sheikh','abdul','abdur',  'dr', 'doctor', 'prof', 'professor', 'kumar', 'sir', 'lord'];
       const slices = locals.user.fullName.trim().split(/\s+/); let realName =
       slices[0]; if (ignore.includes(realName.toLowerCase()) && slices.length >
       1) { realName = slices[1]; } %>

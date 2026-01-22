@@ -306,7 +306,7 @@ router.post("/edit-event/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete-event/:id", async (req, res) => {
+router.post("/delete-event/:id", async (req, res) => {
   try {
     const id = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -48,13 +48,16 @@
         startDateText = `${pad2(startDate.getDate())}
         ${months[startDate.getMonth()]}`; %>
 
-        <a href="/events/<%= event.eventId._id %>" class="event-div">
+        
+              <div class="event-div">
+
+        <a href="/events/<%= event.eventId._id %>" class="event-child-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
               <div class="event-start-time"><%= startTimeText %></div>
               <div class="event-start-date"><%= startDateText %></div>
               <div class="event-end-time"><%= endTimeText %></div>
-              <img class="dotted-line" src="/images/dotted-line.png" />
+              <img class="dotted-line" src="/images/dotted-line1.webp" />
             </div>
           </div>
 
@@ -84,6 +87,7 @@
           <div class="statusNotOk">DID NOT ATTEND</div>
           <% } %>
         </a>
+        </div>
 
         <% }) %>
       </div>
