@@ -29,25 +29,16 @@
 
             <% if(locals.cancelledEvents.length) { %>
       <div class="event-list-div">
-        <% locals.cancelledEvents.forEach(event=> { %> <% const startDate=new
-        Date(event.eventId.startTime); const endDate=new Date(event.eventId.endTime); pad2=(n)=>
-        String(n).padStart(2, '0'); const to12Hour = (d) => { const h24 =
-        d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM' ; const h12=(h24 % 12)
-        || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
-        months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const startTimeText=to12Hour(startDate); const
-        endTimeText=to12Hour(endDate); const
-        startDateText=`${pad2(startDate.getDate())}
-        ${months[startDate.getMonth()]}`; %>
+        <% locals.cancelledEvents.forEach(event=> { %> 
 
               <div class="event-div">
 
         <a href="/events/<%= event.eventId._id %>" class="event-child-div">
           <div class="event-time-div">
             <div class="event-time-internal-div">
-              <div class="event-start-time"><%= startTimeText %></div>
-              <div class="event-start-date"><%=startDateText%></div>
-              <div class="event-end-time"><%= endTimeText %></div>
+      <div class="event-start-time" data-utc="<%= event.eventId.startTime.toISOString() %>"></div>
+<div class="event-start-date" data-utc="<%= event.eventId.startTime.toISOString() %>"></div>
+<div class="event-end-time" data-utc="<%= event.eventId.endTime.toISOString() %>"></div>
               <img class="dotted-line" src="/images/dotted-line1.webp" />
             </div>
           </div>
@@ -67,5 +58,26 @@
     <% } %>
     </div>
     <%- include('../partials/footer.ejs') %>
+    <script>
+  const pad2 = n => String(n).padStart(2, '0');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  document.querySelectorAll('[data-utc]').forEach(el => {
+    const d = new Date(el.dataset.utc); // USER timezone
+
+    if (el.classList.contains('event-start-time') ||
+        el.classList.contains('event-end-time')) {
+      const h24 = d.getHours();
+      const ap = h24 < 12 ? 'AM' : 'PM';
+      const h12 = (h24 % 12) || 12;
+      el.textContent = `${h12}:${pad2(d.getMinutes())} ${ap}`;
+    }
+
+    if (el.classList.contains('event-start-date')) {
+      el.textContent = `${pad2(d.getDate())} ${months[d.getMonth()]}`;
+    }
+  });
+</script>
+
   </body>
 </html>

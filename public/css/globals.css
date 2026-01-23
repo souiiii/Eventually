@@ -1043,6 +1043,7 @@ textarea {
   border: 1px solid var(--shadow-color);
   overflow: hidden;
   margin-block: 1rem;
+  margin-bottom: 2rem;
 }
 
 .attendance-registered-students-header {

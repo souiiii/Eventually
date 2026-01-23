@@ -6,58 +6,83 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
+
+
       <div class="heading-div">
         <h1 class="heading">Past Events</h1>
         <form action="/events/history" method="get" class="sort-by-div">
           <label>
-           <span>Sort by:&nbsp;</span>
+            <span>Sort by:&nbsp;</span>
             <select class="selected" onchange="this.form.submit()" name="sort">
-              <option value="recent" <%= locals.select=== 'recent' ? 'selected' : '' %> >recent</option>
-              <option value="oldest"  <%= locals.select=== 'oldest' ? 'selected' : '' %> >oldest</option>
-              <option value="upload-time" <%= locals.select=== 'upload-time' ? 'selected' : '' %> >upload time</option>
+              <option value="recent" <%= locals.select === 'recent' ? 'selected' : '' %>>recent</option>
+              <option value="oldest" <%= locals.select === 'oldest' ? 'selected' : '' %>>oldest</option>
+              <option value="upload-time" <%= locals.select === 'upload-time' ? 'selected' : '' %>>upload time</option>
             </select>
           </label>
         </form>
       </div>
 
-      <% if(locals.events.length) { %>
-      <div class="event-list-div">
-        <% locals.events.forEach(event=> { %> <% const startDate=new
-        Date(event.startTime); const endDate=new Date(event.endTime); pad2=(n)=>
-        String(n).padStart(2, '0'); const to12Hour = (d) => { const h24 =
-        d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM' ; const h12=(h24 % 12)
-        || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
-        months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const startTimeText=to12Hour(startDate); const
-        endTimeText=to12Hour(endDate); const
-        startDateText=`${pad2(startDate.getDate())}
-        ${months[startDate.getMonth()]}`; %>
+<% if (locals.events.length) { %>
+<div class="event-list-div">
 
-        <div class="event-div">
+<% locals.events.forEach(event => {
 
-        <a href="/events/<%= event._id %>" class="event-child-div">
-          <div class="event-time-div">
-            <div class="event-time-internal-div">
-              <div class="event-start-time"><%= startTimeText %></div>
-              <div class="event-start-date"><%=startDateText%></div>
-              <div class="event-end-time"><%= endTimeText %></div>
-              <img class="dotted-line" src="/images/dotted-line1.webp" />
-            </div>
-          </div>
-          <div class="event-desc-div">
-            <div class="event-title"><%= event.title %></div>
-            <div class="event-short-description">
-              <%= event.shortDescription %>
-            </div>
-          </div>
-        </a>
+  // ✅ UTC → local Date objects
+ 
+%>
+
+  <div class="event-div">
+    <a href="/events/<%= event._id %>" class="event-child-div">
+      <div class="event-time-div">
+        <div class="event-time-internal-div">
+       <div class="event-start-time" data-utc="<%= event.startTime.toISOString() %>"></div>
+<div class="event-start-date" data-utc="<%= event.startTime.toISOString() %>"></div>
+<div class="event-end-time" data-utc="<%= event.endTime.toISOString() %>"></div>
+
+          <img class="dotted-line" src="/images/dotted-line1.webp" />
         </div>
-        <% }) %>
       </div>
-        <% } else { %>
-          <div class="message">🤔 No event history!</div>
-    <% } %>
+
+      <div class="event-desc-div">
+        <div class="event-title"><%= event.title %></div>
+        <div class="event-short-description">
+          <%= event.shortDescription %>
+        </div>
+      </div>
+    </a>
+  </div>
+
+<% }) %>
+</div>
+
+<% } else { %>
+  <div class="message">🤔 No event history!</div>
+<% } %>
+
     </div>
     <%- include('../partials/footer.ejs') %>
+    <script>
+  const pad2 = n => String(n).padStart(2, '0');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  document.querySelectorAll('[data-utc]').forEach(el => {
+    const d = new Date(el.dataset.utc); // USER timezone
+
+    if (
+      el.classList.contains('event-start-time') ||
+      el.classList.contains('event-end-time')
+    ) {
+      const h24 = d.getHours();
+      const ap = h24 < 12 ? 'AM' : 'PM';
+      const h12 = (h24 % 12) || 12;
+      el.textContent = `${h12}:${pad2(d.getMinutes())} ${ap}`;
+    }
+
+    if (el.classList.contains('event-start-date')) {
+      el.textContent = `${pad2(d.getDate())} ${months[d.getMonth()]}`;
+    }
+  });
+</script>
+
   </body>
 </html>

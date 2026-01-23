@@ -7,18 +7,27 @@
   <body>
     <div class="main">
       <%- include('../partials/navbar.ejs') %>
-      <% const
+      <%  
+  //     const toLocalDate = (utcValue) => {
+  //   if (!utcValue) return null;
+  //   const d = new Date(utcValue); 
+  //   return isNaN(d.getTime()) ? null : d;
+  // };
+      
+      
+      const
           registeredEventsIds = locals.registeredEvents .filter(m => m.status
           === 'REGISTERED') .map(m => m.eventId.toString()); const
           cancelledEventsIds = locals.registeredEvents .filter(m => m.status ===
           'CANCELLED') .map(m => m.eventId.toString());
           
-          const
-        pad2 = n => String(n).padStart(2, '0'); const to12Hour = d => { const
-        h24 = d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM'; const h12 = (h24
-        % 12) || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
-        months = [ 'Jan','Feb','Mar','Apr','May','Jun',
-        'Jul','Aug','Sep','Oct','Nov','Dec' ];%>
+        //   const pad2 = n => String(n).padStart(2, '0'); const to12Hour = d => { const
+        // h24 = d.getHours(); const ap = h24 < 12 ? 'AM' : 'PM'; const h12 = (h24
+        // % 12) || 12; return `${h12}:${pad2(d.getMinutes())} ${ap}`; }; const
+        // months = [ 'Jan','Feb','Mar','Apr','May','Jun',
+        // 'Jul','Aug','Sep','Oct','Nov','Dec' ];
+        
+        %>
       <div class="heading-div">
         <h1 class="heading">Upcoming Events</h1>
         <form action="/events/discover" method="get" class="sort-by-div">
@@ -39,11 +48,13 @@
     
 <% if(locals.events.length) { %>
     <div class="event-list-div">
-        <% locals.events.forEach(event => { %> <% const startDate = new
-        Date(event.startTime); const endDate = new Date(event.endTime);  const startTimeText =
-        to12Hour(startDate); const endTimeText = to12Hour(endDate); const
-        startDateText = `${pad2(startDate.getDate())}
-        ${months[startDate.getMonth()]}`; %>
+        <% locals.events.forEach(event => { %> <%  
+  //       const startDate = toLocalDate(event.startTime);
+  // const endDate   = toLocalDate(event.endTime);
+
+  // const startTimeText = to12Hour(startDate);
+  // const endTimeText   = to12Hour(endDate);
+  // const startDateText = `${pad2(startDate.getDate())} ${months[startDate.getMonth()]}`; %>
 <div class="event-div">
 <% if(locals.role==='ADMIN') { %>
             <div class="admin-action-form">
@@ -57,12 +68,13 @@
             </div>
 
           <% } %>
-        <a href="/events/<%= event._id %>" class="event-child-div">
+        <a href="/events/<%= event._id %>" class="event-child-div"   data-start="<%= event.startTime.toISOString() %>"
+  data-end="<%= event.endTime.toISOString() %>">
           <div class="event-time-div">
             <div class="event-time-internal-div">
-              <div class="event-start-time"><%= startTimeText %></div>
-              <div class="event-start-date"><%= startDateText %></div>
-              <div class="event-end-time"><%= endTimeText %></div>
+       <div class="event-start-time"></div>
+<div class="event-start-date"></div>
+<div class="event-end-time"></div>
               <img class="dotted-line" src="/images/dotted-line1.webp" />
             </div>
           </div>
@@ -109,6 +121,33 @@
     </div>
 
     <%- include('../partials/footer.ejs') %>
-   
+   <script>
+  const pad2 = n => String(n).padStart(2, "0");
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  const to12Hour = d => {
+    const h24 = d.getHours();
+    const h12 = h24 % 12 || 12;
+    const ap = h24 < 12 ? "AM" : "PM";
+    return `${h12}:${pad2(d.getMinutes())} ${ap}`;
+  };
+
+  document.querySelectorAll(".event-child-div").forEach(card => {
+    const start = new Date(card.dataset.start);
+    const end   = new Date(card.dataset.end);
+
+    const startTimeEl = card.querySelector(".event-start-time");
+    const startDateEl = card.querySelector(".event-start-date");
+    const endTimeEl   = card.querySelector(".event-end-time");
+
+    if (!startTimeEl) return;
+
+    startTimeEl.textContent = to12Hour(start);
+    endTimeEl.textContent   = to12Hour(end);
+    startDateEl.textContent =
+      `${pad2(start.getDate())} ${months[start.getMonth()]}`;
+  });
+</script>
+
   </body>
 </html>
