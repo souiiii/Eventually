@@ -3,6 +3,14 @@
 
 **Eventually** is a web-based event management system designed to streamline the process of organizing, managing, and attending events. It features role-based access control for Administrators and Students, allowing for secure event creation, registration, and attendance tracking.
 
+
+# Project Showcase
+
+<img width="929" height="930" alt="image" src="https://github.com/user-attachments/assets/98f063e8-ac92-468b-81a3-0c211b51c108" />
+<img width="687" height="856" alt="image" src="https://github.com/user-attachments/assets/841cc7af-e0b4-4482-b7d7-f97a85edeea9" />
+<img width="853" height="741" alt="image" src="https://github.com/user-attachments/assets/da92a235-4e6c-429f-b725-125d4c53b2d8" />
+
+
 ## 🚀 Features
 
 ### For Administrators
