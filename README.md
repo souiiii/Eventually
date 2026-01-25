@@ -6,9 +6,9 @@
 
 # Project Showcase
 
-<img width="430" height="430" alt="image" src="https://github.com/user-attachments/assets/98f063e8-ac92-468b-81a3-0c211b51c108" />
-<img width="430" height="430" alt="image" src="https://github.com/user-attachments/assets/841cc7af-e0b4-4482-b7d7-f97a85edeea9" />
-<img width="430" height="430" alt="image" src="https://github.com/user-attachments/assets/da92a235-4e6c-429f-b725-125d4c53b2d8" />
+<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/98f063e8-ac92-468b-81a3-0c211b51c108" />
+<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/841cc7af-e0b4-4482-b7d7-f97a85edeea9" />
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/da92a235-4e6c-429f-b725-125d4c53b2d8" />
 
 
 ## 🚀 Features
